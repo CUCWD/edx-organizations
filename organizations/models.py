@@ -30,6 +30,10 @@ class Organization(TimeStampedModel):
         null=True, blank=True, max_length=255
     )
     active = models.BooleanField(default=True)
+    sites = models.ManyToManyField(
+        'sites.Site',
+        related_name='organizations',
+    )
 
     def __unicode__(self):
         return u"{name} ({short_name})".format(name=self.name, short_name=self.short_name)
