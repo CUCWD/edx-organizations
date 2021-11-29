@@ -83,3 +83,5 @@ class UserOrganizationMapping(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
+    is_amc_admin = models.BooleanField(default=False)
+    
