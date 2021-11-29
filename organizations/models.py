@@ -73,3 +73,5 @@ class UserOrganizationMapping(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     organization = models.ForeignKey(Organization)
     is_active = models.BooleanField(default=False)
+    is_amc_admin = models.BooleanField(default=False)
+    
