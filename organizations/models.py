@@ -7,7 +7,8 @@ offers one programmatic API -- api.py for direct Python integration.
 import re
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from model_utils.models import TimeStampedModel
 from simple_history.models import HistoricalRecords
 
@@ -36,6 +37,11 @@ class Organization(TimeStampedModel):
         null=True, blank=True, max_length=255
     )
     active = models.BooleanField(default=True)
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through='UserOrganizationMapping',
+        related_name="organizations"
+    )
     sites = models.ManyToManyField(
         'sites.Site',
         related_name='organizations',
@@ -71,3 +77,9 @@ class OrganizationCourse(TimeStampedModel):
         unique_together = (('course_id', 'organization'),)
         verbose_name = _('Link Course')
         verbose_name_plural = _('Link Courses')
+
+
+class UserOrganizationMapping(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=False)
