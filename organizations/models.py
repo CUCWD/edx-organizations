@@ -59,6 +59,47 @@ class Organization(TimeStampedModel):
                                     'and underscore (_).'))
 
 
+class OrganizationInstitution(TimeStampedModel):
+    """
+    An OrganizationInstitution represents linking of an organization to a school or academy.
+    Some organizations may be schools, however, this represents a further breakdown of schools
+    underneath a larger umbrella (e.g. Choose Aerospace).
+    """
+    name = models.CharField(max_length=255, db_index=True)
+    short_name = models.CharField(
+        max_length=255,
+        unique=True,
+        verbose_name='Short Name',
+        help_text=_(
+            'Unique, short string identifier for organization institution. '
+            'Please do not use spaces or special characters. '
+            'Only allowed special characters are period (.), hyphen (-) and underscore (_).'
+        ),
+    )
+    description = models.TextField(null=True, blank=True)
+    logo = models.ImageField(
+        upload_to='organization_institution_logos',
+        help_text=_('Please add only .PNG files for logo images. This logo will be used on certificates.'),
+        null=True, blank=True, max_length=255
+    )
+    active = models.BooleanField(default=True)
+    organizations = models.ManyToManyField(
+        'organizations.Organization',
+        related_name='organizations',
+    )
+
+    history = HistoricalRecords()
+
+    def __str__(self):
+        return f"{self.name} ({self.short_name})"
+
+    def clean(self):
+        if not re.match("^[a-zA-Z0-9._-]*$", self.short_name):
+            raise ValidationError(_('Please do not use spaces or special characters in the short name '
+                                    'field. Only allowed special characters are period (.), hyphen (-) '
+                                    'and underscore (_).'))
+
+
 class OrganizationCourse(TimeStampedModel):
     """
     An OrganizationCourse represents the link between an Organization and a
@@ -68,6 +109,28 @@ class OrganizationCourse(TimeStampedModel):
     """
     course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
     organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
+    # organization_institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+
+    history = HistoricalRecords()
+
+    class Meta:
+        """ Meta class for this Django model """
+        unique_together = (('course_id', 'organization'),)
+        verbose_name = _('Link Course')
+        verbose_name_plural = _('Link Courses')
+
+
+class OrganizationInstitutionCourse(TimeStampedModel):
+    """
+    An OrganizationInstitutionCourse represents the link between an OrganizationInstitution and a
+    Course (via course key). Because Courses are not true Open edX entities
+    (in the Django/ORM sense) the modeling and integrity is limited to that
+    of specifying course identifier strings in this model.
+    """
+    course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
+    organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
+    # organization_institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
     history = HistoricalRecords()
@@ -80,8 +143,13 @@ class OrganizationCourse(TimeStampedModel):
 
 
 class UserOrganizationMapping(models.Model):
+    """
+    Map a user to an organization. This is more about access control for the Figures frontend site.
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
     is_amc_admin = models.BooleanField(default=False)
     
+
+
