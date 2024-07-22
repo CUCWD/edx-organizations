@@ -2,7 +2,7 @@
 from django.contrib import admin, messages
 from django.utils.translation import gettext_lazy as _
 
-from organizations.models import Organization, OrganizationCourse
+from organizations.models import Organization, OrganizationCourse, OrganizationInstitution
 
 
 class ActivateDeactivateAdminMixin:
@@ -85,3 +85,14 @@ class OrganizationCourseAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
             kwargs['queryset'] = Organization.objects.filter(active=True).order_by('name')
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(OrganizationInstitution)
+class OrganizationInstitutionAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
+    """ Admin for the Organization model. """
+    actions = ['activate_selected', 'deactivate_selected']
+    list_display = ('name', 'short_name', 'logo', 'active',)
+    list_filter = ('active',)
+    ordering = ('name', 'short_name',)
+    readonly_fields = ('created',)
+    search_fields = ('name', 'short_name',)
