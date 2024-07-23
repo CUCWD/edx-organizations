@@ -156,6 +156,14 @@ def remove_organization(organization_id):
     }
     data.delete_organization(organization)
 
+def get_organization_institutions(organization_data):
+    """
+    Retrieves the set of courses for a given organization
+    Returns an array of course identifiers
+    """
+    _validate_organization_data(organization_data)
+    return data.fetch_organization_institutions(organization=organization_data)
+
 
 def add_organization_course(organization_data, course_key):
     """

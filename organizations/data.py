@@ -532,6 +532,17 @@ def fetch_organization_courses(organization):
     ).select_related('organization')
     return [serializers.serialize_organization_with_course(organization) for organization in queryset]
 
+def fetch_organization_institutions(organization):
+    """
+    Retrieves the set of institutions currently linked to the specified organization
+    """
+    organization_obj = serializers.deserialize_organization(organization)
+    queryset = internal.OrganizationInstitution.objects.filter(
+        organizations=organization_obj,
+        active=True
+    )
+    return [serializers.serialize_organization_institutions(institution) for institution in queryset]
+
 
 def fetch_course_organizations(course_key):
     """
