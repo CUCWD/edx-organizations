@@ -91,7 +91,7 @@ class OrganizationCourseAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
 class OrganizationInstitutionAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
     """ Admin for the Organization model. """
     actions = ['activate_selected', 'deactivate_selected']
-    list_display = ('name', 'short_name', 'logo', 'active',)
+    list_display = ('name', 'short_name', 'city', 'state', 'zipcode', 'active',)
     list_filter = ('active',)
     ordering = ('name', 'short_name',)
     readonly_fields = ('created',)
