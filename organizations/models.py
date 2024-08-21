@@ -178,6 +178,17 @@ class OrganizationInstitution(TimeStampedModel):
                                     'field. Only allowed special characters are period (.), hyphen (-) '
                                     'and underscore (_).'))
 
+    @classmethod 
+    def get_by_shortname(cls, short_name):
+        try:
+            org_institution = cls.objects.get(short_name=short_name)
+        except cls.DoesNotExist:
+            org_institution = None
+
+        return org_institution
+
+
+
 
 class OrganizationCourse(TimeStampedModel):
     """
@@ -208,7 +219,7 @@ class OrganizationInstitutionCourse(TimeStampedModel):
     of specifying course identifier strings in this model.
     """
     course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
-    organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)
+    institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
     # organization_institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
@@ -216,7 +227,7 @@ class OrganizationInstitutionCourse(TimeStampedModel):
 
     class Meta:
         """ Meta class for this Django model """
-        unique_together = (('course_id', 'organization'),)
+        unique_together = (('course_id', 'institution'),)
         verbose_name = _('Link Course')
         verbose_name_plural = _('Link Courses')
 
