@@ -165,6 +165,25 @@ def get_organization_institutions(organization_data):
     return data.fetch_organization_institutions(organization=organization_data)
 
 
+def add_institution_course(institution, course_key):
+    """
+    Adds a organization-course link to the system
+    """
+    _validate_course_key(course_key)
+    data.create_institution_course(
+        institution=institution,
+        course_key=course_key
+    )
+
+
+def remove_institution_course(organization, course_key):
+    """
+    Removes the specfied course from the specified institution
+    """
+    _validate_course_key(course_key)
+    return data.delete_institution_course(course_key=course_key, institution=institution)
+
+
 def add_organization_course(organization_data, course_key):
     """
     Adds a organization-course link to the system
