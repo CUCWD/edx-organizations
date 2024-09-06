@@ -84,18 +84,6 @@ class OrganizationInstitution(TimeStampedModel):
         null=True, blank=True, max_length=255
     )
 
-
-    zipcode = models.CharField(
-        verbose_name="Zip Code",
-        max_length=10,
-        null=True,
-        blank=True,
-        validators=[RegexValidator(
-            regex=r'^(\d{5}([\-]\d{4})?)$',
-            message=u'Must be a valid zipcode'
-        )]
-    )
-
     STATE_CHOICES = (
         ('AL', 'Alabama'),
         ('AK', 'Alaska'),
@@ -160,6 +148,16 @@ class OrganizationInstitution(TimeStampedModel):
         choices=STATE_CHOICES
     )
 
+    zipcode = models.CharField(
+        verbose_name="Zip Code",
+        max_length=10,
+        null=True,
+        blank=True,
+        validators=[RegexValidator(
+            regex=r'^(\d{5}([\-]\d{4})?)$',
+            message=u'Must be a valid zipcode'
+        )]
+    )
 
     active = models.BooleanField(default=True)
     organizations = models.ManyToManyField(
