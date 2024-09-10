@@ -141,18 +141,18 @@ class OrganizationInstitution(TimeStampedModel):
         ('WY', 'Wyoming'),
     )
 
-    city = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=False, blank=False)
     state = models.CharField(
         verbose_name="State",
-        blank=True, null=True, max_length=2, db_index=True,
+        blank=False, null=False, max_length=2, db_index=True,
         choices=STATE_CHOICES
     )
 
     zipcode = models.CharField(
         verbose_name="Zip Code",
         max_length=10,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         validators=[RegexValidator(
             regex=r'^(\d{5}([\-]\d{4})?)$',
             message=u'Must be a valid zipcode'
@@ -217,7 +217,7 @@ class OrganizationInstitutionCourse(TimeStampedModel):
     of specifying course identifier strings in this model.
     """
     course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
-    institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
+    institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE, default=None)
     # organization_institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
 
