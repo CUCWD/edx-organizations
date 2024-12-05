@@ -176,7 +176,7 @@ class OrganizationInstitution(TimeStampedModel):
                                     'field. Only allowed special characters are period (.), hyphen (-) '
                                     'and underscore (_).'))
 
-    @classmethod 
+    @classmethod
     def get_by_shortname(cls, short_name):
         try:
             org_institution = cls.objects.get(short_name=short_name)

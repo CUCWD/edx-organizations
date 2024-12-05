@@ -63,6 +63,7 @@ def serialize_organization_with_course(organization_course):
         'course_id': organization_course.course_id
     }
 
+
 def serialize_organization_institutions(organization_institution):
     """
     OrganizationInstitution serialization (composite object)

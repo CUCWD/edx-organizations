@@ -156,6 +156,7 @@ def remove_organization(organization_id):
     }
     data.delete_organization(organization)
 
+
 def get_organization_institutions(organization_data):
     """
     Retrieves the set of courses for a given organization
