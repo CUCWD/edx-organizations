@@ -613,10 +613,13 @@ def fetch_course_organizations(course_key):
     """
     Retrieves the organizations linked to the specified course
     """
-    queryset = internal.OrganizationCourse.objects.filter(
-        course_id=str(course_key),
-        active=True
-    ).select_related('organization')
+    split_course_key = str(course_key).split(':')
+    if (len(split_course_key)>1):
+        course_string = split_course_key[1]
+    else:
+        course_string = str(course_key)
+
+    queryset = internal.OrganizationCourse.objects.filter(course_id=course_string, active=True).select_related('organization')
     return [serializers.serialize_organization_with_course(organization) for organization in queryset]
 
 
