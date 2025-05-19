@@ -207,6 +207,28 @@ class OrganizationCourse(TimeStampedModel):
         verbose_name_plural = _('Link Courses')
 
 
+
+class OrganizationInstitutionCourse(TimeStampedModel):
+    """
+    An OrganizationInstitutionCourse represents the link between an OrganizationInstitution and a
+    Course (via course key). Because Courses are not true Open edX entities
+    (in the Django/ORM sense) the modeling and integrity is limited to that
+    of specifying course identifier strings in this model.
+    """
+    course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
+    institution = models.ForeignKey(OrganizationInstitution, db_index=True, on_delete=models.CASCADE, default=None)
+    active = models.BooleanField(default=True)
+
+    history = HistoricalRecords()
+
+    class Meta:
+        """ Meta class for this Django model """
+        unique_together = (('course_id', 'institution'),)
+        verbose_name = _('Link Course')
+        verbose_name_plural = _('Link Courses')
+
+
+
 class UserOrganizationMapping(models.Model):
     """
     Map a user to an organization. This is more about access control for the Figures frontend site.
