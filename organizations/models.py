@@ -203,8 +203,8 @@ class OrganizationCourse(TimeStampedModel):
     class Meta:
         """ Meta class for this Django model """
         unique_together = (('course_id', 'organization'),)
-        verbose_name = _('Link Course')
-        verbose_name_plural = _('Link Courses')
+        verbose_name = _('Link Course Organization')
+        verbose_name_plural = _('Link Courses Organization')
 
 
 
@@ -224,8 +224,8 @@ class OrganizationInstitutionCourse(TimeStampedModel):
     class Meta:
         """ Meta class for this Django model """
         unique_together = (('course_id', 'institution'),)
-        verbose_name = _('Link Course')
-        verbose_name_plural = _('Link Courses')
+        verbose_name = _('Link Course Institution')
+        verbose_name_plural = _('Link Courses Institution')
 
 
 
