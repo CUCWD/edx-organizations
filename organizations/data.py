@@ -90,18 +90,6 @@ def _activate_organization_course_relationship(relationship):  # pylint: disable
     _activate_record(relationship)
 
 
-def _activate_institution_course_relationship(relationship):  # pylint: disable=invalid-name
-    """
-    Activates an inactive institution-course relationship
-    """
-    # If the relationship doesn't exist or the organization isn't active we'll want to raise an error
-    relationship = internal.OrganizationInstitutionCourse.objects.get(
-        id=relationship.id,
-        active=False,
-        organization__active=True
-    )
-    _activate_record(relationship)
-
 
 def _inactivate_organization_course_relationship(relationship):  # pylint: disable=invalid-name
     """
@@ -114,15 +102,6 @@ def _inactivate_organization_course_relationship(relationship):  # pylint: disab
     _inactivate_record(relationship)
 
 
-def _inactivate_institution_course_relationship(relationship):  # pylint: disable=invalid-name
-    """
-    Inactivates an active institution-course relationship
-    """
-    relationship = internal.OrganizationInstitutionCourse.objects.get(
-        id=relationship.id,
-        active=True
-    )
-    _inactivate_record(relationship)
 
 
 # PUBLIC METHODS
@@ -557,56 +536,6 @@ def fetch_organization_courses(organization):
     return [serializers.serialize_organization_with_course(organization) for organization in queryset]
 
 
-def fetch_organization_institutions(organization):
-    """
-    Retrieves the set of institutions currently linked to the specified organization
-    """
-    organization_obj = serializers.deserialize_organization(organization)
-    queryset = internal.OrganizationInstitution.objects.filter(
-        organizations=organization_obj,
-        active=True
-    )
-    return [serializers.serialize_organization_institutions(institution) for institution in queryset]
-
-
-def create_institution_course(institution, course_key):
-    """
-    Inserts a new institution-course relationship into app/local state
-    No response currently defined for this operation
-    """
-
-    try:
-        relationship = internal.OrganizationInstitutionCourse.objects.get(
-            institution=institution,
-            course_id=str(course_key)
-        )
-        # If the relationship exists, but was inactivated, we can simply turn it back on
-        if not relationship.active:
-            _activate_institution_course_relationship(relationship)
-    except internal.OrganizationCourse.DoesNotExist:
-        relationship = internal.OrganizationInstitutionCourse.objects.create(
-            institution=institution,
-            course_id=str(course_key),
-            active=True
-        )
-
-
-def delete_institution_course(institution, course_key):
-    """
-    Removes an existing institution-course relationship from app/local state
-    No response currently defined for this operation
-    """
-    try:
-        relationship = internal.OrganizationInstitutionCourse.objects.get(
-            institution=institution['id'],
-            course_id=str(course_key),
-            active=True,
-        )
-        _inactivate_institution_course_relationship(relationship)
-    except internal.OrganizationInstitutionCourse.DoesNotExist:
-        # If we're being asked to delete an organization-course link
-        # that does not exist in the database then our work is done
-        pass
 
 
 def fetch_course_organizations(course_key):
@@ -619,16 +548,6 @@ def fetch_course_organizations(course_key):
     ).select_related('organization')
     return [serializers.serialize_organization_with_course(organization) for organization in queryset]
 
-
-def fetch_course_institution(course_key):
-    """
-    Retrieves the institution linked to the specified course
-    """
-    queryset = internal.OrganizationInstitutionCourse.objects.filter(
-        course_id=str(course_key),
-        active=True
-    ).select_related('institution')
-    # return [serializers.serialize_organization_with_course(organization) for organization in queryset]
 
 
 def delete_course_references(course_key):

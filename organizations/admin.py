@@ -2,7 +2,7 @@
 from django.contrib import admin, messages
 from django.utils.translation import gettext_lazy as _
 
-from organizations.models import Organization, OrganizationCourse, OrganizationInstitution, OrganizationInstitutionCourse
+from organizations.models import Organization, OrganizationCourse
 
 
 class ActivateDeactivateAdminMixin:
@@ -86,29 +86,3 @@ class OrganizationCourseAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
 
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-
-@admin.register(OrganizationInstitution)
-class OrganizationInstitutionAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
-    """ Admin for the Organization model. """
-    actions = ['activate_selected', 'deactivate_selected']
-    list_display = ('name', 'short_name', 'city', 'state', 'zipcode', 'active',)
-    list_filter = ('active',)
-    ordering = ('name', 'short_name',)
-    readonly_fields = ('created',)
-    search_fields = ('name', 'short_name',)
-
-@admin.register(OrganizationInstitutionCourse)
-class OrganizationInstitutionCourseAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
-    """ Admin for the OrganizationCourse model. """
-    actions = ['activate_selected', 'deactivate_selected']
-    list_display = ('course_id', 'institution', 'active')
-    list_filter = ('active',)
-    ordering = ('course_id', 'institution__name',)
-    search_fields = ('course_id', 'institution__name', 'institution__short_name',)
-
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        # Only display active Organizations.
-        if db_field.name == 'institution':  # pragma: no branch
-            kwargs['queryset'] = OrganizationInstitution.objects.filter(active=True).order_by('name')
-
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
