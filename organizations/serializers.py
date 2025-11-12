@@ -17,7 +17,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Organization
         fields = ('id', 'created', 'modified', 'name', 'short_name', 'description', 'logo',
-                  'active', 'logo_url',)
+                  'city', 'state', 'zipcode', 'active', 'logo_url',)
 
     def update_logo(self, obj, logo_url):
         if logo_url:  # pragma: no cover
@@ -46,7 +46,11 @@ def serialize_organization(organization):
         'name': organization.name,
         'short_name': organization.short_name,
         'description': organization.description,
-        'logo': organization.logo
+        'logo': organization.logo,
+        'city': organization.city,
+        'state': organization.state,
+        'zipcode': organization.zipcode,
+        'active': organization.active
     }
 
 
@@ -60,6 +64,10 @@ def serialize_organization_with_course(organization_course):
         'short_name': organization_course.organization.short_name,
         'description': organization_course.organization.description,
         'logo': organization_course.organization.logo,
+        'city': organization_course.organization.city,
+        'state': organization_course.organization.state,
+        'zipcode': organization_course.organization.zipcode,
+        'active': organization_course.organization.active,
         'course_id': organization_course.course_id
     }
 
@@ -81,5 +89,9 @@ def deserialize_organization(organization_dict):
         name=organization_dict.get('name', ''),
         short_name=organization_dict.get('short_name', ''),
         description=organization_dict.get('description', ''),
-        logo=organization_dict.get('logo', '')
+        logo=organization_dict.get('logo', ''),
+        city=organization_dict.get('city', ''),
+        state=organization_dict.get('state', ''),
+        zipcode=organization_dict.get('zipcode', ''),
+        active=organization_dict.get('active', True)
     )
