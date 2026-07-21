@@ -40,10 +40,20 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
 
     def test_default_fields(self):
         """
-        Test: organization default fields should be name, description and active.
+        Test: organization admin should expose all editable organization fields.
         """
         self.assertEqual(list(self.org_admin.get_form(self.request).base_fields),
-                         ['name', 'short_name', 'description', 'logo', 'active'])
+                         [
+                             'name',
+                             'short_name',
+                             'description',
+                             'logo',
+                             'city',
+                             'state',
+                             'zipcode',
+                             'sites',
+                             'active',
+                         ])
 
     def test_organization_actions(self):
         """
