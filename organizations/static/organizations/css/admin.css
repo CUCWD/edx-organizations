@@ -4,11 +4,11 @@ select.parent-organization-autocomplete + .select2-container {
     width: min(50em, calc(100% - 8em)) !important;
 }
 
-.field-parent_organization .flex-container {
+.field-parent_organizations .flex-container {
     flex-wrap: wrap;
 }
 
-.field-parent_organization .related-widget-wrapper {
+.field-parent_organizations .related-widget-wrapper {
     flex: 0 0 min(58em, 100%);
     width: min(58em, 100%);
     max-width: 100%;

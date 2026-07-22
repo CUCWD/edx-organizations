@@ -1,8 +1,9 @@
 -- Insert or backfill classifications for the Choose Aerospace Open edX site.
--- Run after organizations migration 0007_organization_and_parent_website_location.
+-- Run after organizations migration 0008_remove_historicalorganization_parent_organization_and_more.
 -- The unique short_name key makes
--- each statement idempotent. New records retain the source created, modified,
--- and active values. Existing records update the reviewed description plus
+-- each statement idempotent. New records retain the source created and modified
+-- values. Parent organizations are inactive; existing parent rows are updated
+-- to the same inactive status. Existing records update the reviewed description plus
 -- the seven location and classification fields listed in ON DUPLICATE KEY UPDATE.
 -- Incoming NULL locations preserve any location already stored on a duplicate.
 -- website_url stores the supporting organization page separately from the
@@ -22,9 +23,10 @@
 START TRANSACTION;
 
 -- Parent organization: Choose Aerospace
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Choose Aerospace', 'CA', 'A nonprofit that develops industry-aligned aviation maintenance curriculum and pathways to aerospace careers.', 'https://www.chooseaerospace.org/', 'Jenks', 'OK', '74037', '2025-07-07 00:27:56.711635', '2025-08-14 23:09:51.512840', 1, 'education_nonprofit', 'secondary_adult', 'nonprofit')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Choose Aerospace', 'CA', 'A nonprofit that develops industry-aligned aviation maintenance curriculum and pathways to aerospace careers.', 'https://www.chooseaerospace.org/', 'Jenks', 'OK', '74037', '2025-07-07 00:27:56.711635', '2025-08-14 23:09:51.512840', 0, 'education_nonprofit', 'secondary_adult', 'nonprofit')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
+    active = VALUES(active),
     city = COALESCE(VALUES(city), city),
     state = COALESCE(VALUES(state), state),
     zipcode = COALESCE(VALUES(zipcode), zipcode),
@@ -36,83 +38,84 @@ ON DUPLICATE KEY UPDATE
 -- Parent organizations must be inserted before the child organizations that reference them.
 INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES
     -- Parent organization: Hillsboro School District
-    ('Hillsboro School District', 'HillsboroSD', 'A public K-12 school district serving Hillsboro, OR.', 'https://www.hsd.k12.or.us/', 'Hillsboro', 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Hillsboro School District', 'HillsboroSD', 'A public K-12 school district serving Hillsboro, OR.', 'https://www.hsd.k12.or.us/', 'Hillsboro', 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Sand Springs Public Schools
-    ('Sand Springs Public Schools', 'SandSpringsPS', 'A public K-12 school district serving Sand Springs, OK.', 'https://www.sandites.org/', 'Sand Springs', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Sand Springs Public Schools', 'SandSpringsPS', 'A public K-12 school district serving Sand Springs, OK.', 'https://www.sandites.org/', 'Sand Springs', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Pryor Public Schools
-    ('Pryor Public Schools', 'PryorPS', 'A public K-12 school district serving Pryor, OK.', 'https://www.pryorschools.org/', 'Pryor', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Pryor Public Schools', 'PryorPS', 'A public K-12 school district serving Pryor, OK.', 'https://www.pryorschools.org/', 'Pryor', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Newcastle Public Schools
-    ('Newcastle Public Schools', 'NewcastlePS', 'A public K-12 school district serving Newcastle, OK.', 'https://www.newcastle.k12.ok.us/', 'Newcastle', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Newcastle Public Schools', 'NewcastlePS', 'A public K-12 school district serving Newcastle, OK.', 'https://www.newcastle.k12.ok.us/', 'Newcastle', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Bartlesville Public Schools
-    ('Bartlesville Public Schools', 'BartlesvillePS', 'A public K-12 school district serving Bartlesville, OK.', 'https://www.bps-ok.org/', 'Bartlesville', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Bartlesville Public Schools', 'BartlesvillePS', 'A public K-12 school district serving Bartlesville, OK.', 'https://www.bps-ok.org/', 'Bartlesville', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Bristow Public Schools
-    ('Bristow Public Schools', 'BristowPS', 'A public K-12 school district serving Bristow, OK.', 'https://www.bristow.k12.ok.us/', 'Bristow', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Bristow Public Schools', 'BristowPS', 'A public K-12 school district serving Bristow, OK.', 'https://www.bristow.k12.ok.us/', 'Bristow', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Oilton Public Schools
-    ('Oilton Public Schools', 'OiltonPS', 'A public K-12 school district serving Oilton, OK.', 'https://oilton.k12.ok.us/', 'Oilton', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Oilton Public Schools', 'OiltonPS', 'A public K-12 school district serving Oilton, OK.', 'https://oilton.k12.ok.us/', 'Oilton', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Broken Arrow Public Schools
-    ('Broken Arrow Public Schools', 'BrokenArrowPS', 'A public K-12 school district serving Broken Arrow, OK.', 'https://www.baschools.org/', 'Broken Arrow', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Broken Arrow Public Schools', 'BrokenArrowPS', 'A public K-12 school district serving Broken Arrow, OK.', 'https://www.baschools.org/', 'Broken Arrow', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Moore Public Schools
-    ('Moore Public Schools', 'MoorePS', 'A public K-12 school district serving Moore, OK.', 'https://www.mooreschools.com/', 'Moore', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Moore Public Schools', 'MoorePS', 'A public K-12 school district serving Moore, OK.', 'https://www.mooreschools.com/', 'Moore', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: School District of Philadelphia
-    ('School District of Philadelphia', 'PhiladelphiaSD', 'A public K-12 school district serving Philadelphia, PA.', 'https://www.philasd.org/', 'Philadelphia', 'PA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('School District of Philadelphia', 'PhiladelphiaSD', 'A public K-12 school district serving Philadelphia, PA.', 'https://www.philasd.org/', 'Philadelphia', 'PA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Western Heights Public Schools
-    ('Western Heights Public Schools', 'WesternHeightsPS', 'A public K-12 school district serving Oklahoma City, OK.', 'https://www.westernheights.k12.ok.us/', 'Oklahoma City', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Western Heights Public Schools', 'WesternHeightsPS', 'A public K-12 school district serving Oklahoma City, OK.', 'https://www.westernheights.k12.ok.us/', 'Oklahoma City', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Collinsville Public Schools
-    ('Collinsville Public Schools', 'CollinsvillePS', 'A public K-12 school district serving Collinsville, OK.', 'https://www.collinsville.k12.ok.us/', 'Collinsville', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Collinsville Public Schools', 'CollinsvillePS', 'A public K-12 school district serving Collinsville, OK.', 'https://www.collinsville.k12.ok.us/', 'Collinsville', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Detroit Public Schools Community District
-    ('Detroit Public Schools Community District', 'DetroitPSCD', 'A public K-12 school district serving Detroit, MI.', 'https://www.detroitk12.org/', 'Detroit', 'MI', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Detroit Public Schools Community District', 'DetroitPSCD', 'A public K-12 school district serving Detroit, MI.', 'https://www.detroitk12.org/', 'Detroit', 'MI', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Tulsa Public Schools
-    ('Tulsa Public Schools', 'TulsaPS', 'A public K-12 school district serving Tulsa, OK.', 'https://www.tulsaschools.org/', 'Tulsa', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Tulsa Public Schools', 'TulsaPS', 'A public K-12 school district serving Tulsa, OK.', 'https://www.tulsaschools.org/', 'Tulsa', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Okmulgee Public Schools
-    ('Okmulgee Public Schools', 'OkmulgeePS', 'A public K-12 school district serving Okmulgee, OK.', 'https://www.okmulgeeps.com/', 'Okmulgee', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Okmulgee Public Schools', 'OkmulgeePS', 'A public K-12 school district serving Okmulgee, OK.', 'https://www.okmulgeeps.com/', 'Okmulgee', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Wellington USD 353
-    ('Wellington USD 353', 'WellingtonUSD353', 'A public K-12 school district serving Wellington, KS.', 'https://www.usd353.com/', 'Wellington', 'KS', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Wellington USD 353', 'WellingtonUSD353', 'A public K-12 school district serving Wellington, KS.', 'https://www.usd353.com/', 'Wellington', 'KS', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Durant Independent School District
-    ('Durant Independent School District', 'DurantISD', 'A public K-12 school district serving Durant, OK.', 'https://www.durantisd.org/', 'Durant', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Durant Independent School District', 'DurantISD', 'A public K-12 school district serving Durant, OK.', 'https://www.durantisd.org/', 'Durant', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Olive Public Schools
-    ('Olive Public Schools', 'OlivePS', 'A public K-12 school district serving Drumright, OK.', 'https://www.olive.k12.ok.us/', 'Drumright', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Olive Public Schools', 'OlivePS', 'A public K-12 school district serving Drumright, OK.', 'https://www.olive.k12.ok.us/', 'Drumright', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Christian County Public Schools
-    ('Christian County Public Schools', 'ChristianCountyPS', 'A public K-12 school district serving Christian County, KY.', 'https://www.christian.kyschools.us/', null, 'KY', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Christian County Public Schools', 'ChristianCountyPS', 'A public K-12 school district serving Christian County, KY.', 'https://www.christian.kyschools.us/', null, 'KY', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Hood River County School District
-    ('Hood River County School District', 'HoodRiverCountySD', 'A public K-12 school district serving Hood River County, OR.', 'https://www.hoodriver.k12.or.us/', null, 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Hood River County School District', 'HoodRiverCountySD', 'A public K-12 school district serving Hood River County, OR.', 'https://www.hoodriver.k12.or.us/', null, 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Roswell Independent School District
-    ('Roswell Independent School District', 'RoswellISD', 'A public K-12 school district serving Roswell, NM.', 'https://www.risd.k12.nm.us/', 'Roswell', 'NM', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Roswell Independent School District', 'RoswellISD', 'A public K-12 school district serving Roswell, NM.', 'https://www.risd.k12.nm.us/', 'Roswell', 'NM', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: McKinney Independent School District
-    ('McKinney Independent School District', 'McKinneyISD', 'A public K-12 school district serving McKinney, TX.', 'https://www.mckinneyisd.net/', 'McKinney', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('McKinney Independent School District', 'McKinneyISD', 'A public K-12 school district serving McKinney, TX.', 'https://www.mckinneyisd.net/', 'McKinney', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Chelsea Public Schools
-    ('Chelsea Public Schools', 'ChelseaPS', 'A public K-12 school district serving Chelsea, OK.', 'https://www.chelseadragons.net/', 'Chelsea', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Chelsea Public Schools', 'ChelseaPS', 'A public K-12 school district serving Chelsea, OK.', 'https://www.chelseadragons.net/', 'Chelsea', 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Marion Community Unit School District 2
-    ('Marion Community Unit School District 2', 'MarionCUSD2', 'A public K-12 school district serving Marion, IL.', 'https://www.marionunit2.org/', 'Marion', 'IL', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Marion Community Unit School District 2', 'MarionCUSD2', 'A public K-12 school district serving Marion, IL.', 'https://www.marionunit2.org/', 'Marion', 'IL', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Silver Lake Regional School District
-    ('Silver Lake Regional School District', 'SilverLakeRSD', 'A public school district serving communities in Massachusetts.', 'https://www.slrsd.org/', null, 'MA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Silver Lake Regional School District', 'SilverLakeRSD', 'A public school district serving communities in Massachusetts.', 'https://www.slrsd.org/', null, 'MA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Houston Independent School District
-    ('Houston Independent School District', 'HoustonISD', 'A public K-12 school district serving Houston, TX.', 'https://www.houstonisd.org/', 'Houston', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Houston Independent School District', 'HoustonISD', 'A public K-12 school district serving Houston, TX.', 'https://www.houstonisd.org/', 'Houston', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Williston Basin School District 7
-    ('Williston Basin School District 7', 'WillistonBasinSD7', 'A public K-12 school district serving Williston, ND.', 'https://www.willistonschools.org/', 'Williston', 'ND', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Williston Basin School District 7', 'WillistonBasinSD7', 'A public K-12 school district serving Williston, ND.', 'https://www.willistonschools.org/', 'Williston', 'ND', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Grand Prairie Independent School District
-    ('Grand Prairie Independent School District', 'GrandPrairieISD', 'A public K-12 school district serving Grand Prairie, TX.', 'https://www.gpisd.org/', 'Grand Prairie', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Grand Prairie Independent School District', 'GrandPrairieISD', 'A public K-12 school district serving Grand Prairie, TX.', 'https://www.gpisd.org/', 'Grand Prairie', 'TX', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Mid-Del Public Schools
-    ('Mid-Del Public Schools', 'MidDelPS', 'A public K-12 school district serving Midwest City and Del City, OK.', 'https://www.mid-del.net/', null, 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Mid-Del Public Schools', 'MidDelPS', 'A public K-12 school district serving Midwest City and Del City, OK.', 'https://www.mid-del.net/', null, 'OK', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Norfolk Public Schools
-    ('Norfolk Public Schools', 'NorfolkPS', 'A public K-12 school district serving Norfolk, VA.', 'https://www.npsk12.com/', 'Norfolk', 'VA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Norfolk Public Schools', 'NorfolkPS', 'A public K-12 school district serving Norfolk, VA.', 'https://www.npsk12.com/', 'Norfolk', 'VA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Omaha Public Schools
-    ('Omaha Public Schools', 'OmahaPS', 'A public K-12 school district serving Omaha, NE.', 'https://www.ops.org/', 'Omaha', 'NE', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Omaha Public Schools', 'OmahaPS', 'A public K-12 school district serving Omaha, NE.', 'https://www.ops.org/', 'Omaha', 'NE', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Evergreen Public Schools
-    ('Evergreen Public Schools', 'EvergreenPS', 'A public K-12 school district serving Vancouver, WA.', 'https://www.evergreenps.org/', 'Vancouver', 'WA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Evergreen Public Schools', 'EvergreenPS', 'A public K-12 school district serving Vancouver, WA.', 'https://www.evergreenps.org/', 'Vancouver', 'WA', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Dodge City Public Schools USD 443
-    ('Dodge City Public Schools USD 443', 'DodgeCityUSD443', 'A public K-12 school district serving Dodge City, KS.', 'https://www.usd443.org/', 'Dodge City', 'KS', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Dodge City Public Schools USD 443', 'DodgeCityUSD443', 'A public K-12 school district serving Dodge City, KS.', 'https://www.usd443.org/', 'Dodge City', 'KS', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Sahuarita Unified School District
-    ('Sahuarita Unified School District', 'SahuaritaUSD', 'A public K-12 school district serving Sahuarita, AZ.', 'https://susd30.us/', 'Sahuarita', 'AZ', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Sahuarita Unified School District', 'SahuaritaUSD', 'A public K-12 school district serving Sahuarita, AZ.', 'https://susd30.us/', 'Sahuarita', 'AZ', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Wayne County Schools
-    ('Wayne County Schools', 'WayneCS', 'A public K-12 school district serving Wayne County, WV.', 'https://www.wayneschoolswv.org/', null, 'WV', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Wayne County Schools', 'WayneCS', 'A public K-12 school district serving Wayne County, WV.', 'https://www.wayneschoolswv.org/', null, 'WV', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Fayette County Public Schools
-    ('Fayette County Public Schools', 'FayetteCountyPS', 'A public K-12 school district serving Fayette County, KY.', 'https://www.fcps.net/', 'Lexington', 'KY', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Fayette County Public Schools', 'FayetteCountyPS', 'A public K-12 school district serving Fayette County, KY.', 'https://www.fcps.net/', 'Lexington', 'KY', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Salem-Keizer Public Schools
-    ('Salem-Keizer Public Schools', 'SalemKeizerPS', 'A public K-12 school district serving Salem and Keizer, OR.', 'https://salkeiz.k12.or.us/', 'Salem', 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Salem-Keizer Public Schools', 'SalemKeizerPS', 'A public K-12 school district serving Salem and Keizer, OR.', 'https://salkeiz.k12.or.us/', 'Salem', 'OR', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Bismarck Public Schools
-    ('Bismarck Public Schools', 'BismarckPSD', 'A public K-12 school district serving Bismarck, ND.', 'https://www.bismarckschools.org/', 'Bismarck', 'ND', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public')
+    ('Bismarck Public Schools', 'BismarckPSD', 'A public K-12 school district serving Bismarck, ND.', 'https://www.bismarckschools.org/', 'Bismarck', 'ND', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public')
 ON DUPLICATE KEY UPDATE
-    short_name = VALUES(short_name);
+    short_name = VALUES(short_name),
+    active = VALUES(active);
 
 INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Des Moines Public Schools', 'DesMoinesPS', 'A public education agency serving K-12 students and communities in Des Moines, IA.', 'https://centralcampus.dmschools.org/', 'Des Moines', 'IA', '50321', '2022-10-05 19:54:01.518544', '2024-09-12 03:24:44.180422', 1, 'school_district', 'k12', 'public')
 ON DUPLICATE KEY UPDATE
@@ -1353,7 +1356,12 @@ ON DUPLICATE KEY UPDATE
     governance_type = VALUES(governance_type);
 
 -- Assign child organizations to the parent organizations inserted above.
-UPDATE chooseaerospace_prod_openedx.organizations_organization AS child
+INSERT IGNORE INTO chooseaerospace_prod_openedx.organizations_organization_parent_organizations (
+    from_organization_id,
+    to_organization_id
+)
+SELECT child.id, parent.id
+FROM chooseaerospace_prod_openedx.organizations_organization AS child
 INNER JOIN (
     SELECT 'LibertyHS' AS child_short_name, 'HillsboroSD' AS parent_short_name
     UNION ALL SELECT 'CharlesPageHS', 'SandSpringsPS'
@@ -1400,9 +1408,7 @@ INNER JOIN (
 ) AS relationship
     ON relationship.child_short_name = child.short_name
 INNER JOIN chooseaerospace_prod_openedx.organizations_organization AS parent
-    ON parent.short_name = relationship.parent_short_name
-SET child.parent_organization_id = parent.id
-WHERE NOT (child.parent_organization_id <=> parent.id);
+    ON parent.short_name = relationship.parent_short_name;
 
 COMMIT;
 
@@ -1425,8 +1431,10 @@ WHERE short_name IN ('CA', 'DesMoinesPS', 'LibertyHS', 'SAMSAcademy', 'CharlesPa
 -- Verification: every configured relationship should resolve to its expected parent.
 SELECT child.short_name AS child_short_name, parent.short_name AS parent_short_name
 FROM chooseaerospace_prod_openedx.organizations_organization AS child
+INNER JOIN chooseaerospace_prod_openedx.organizations_organization_parent_organizations AS relationship
+    ON relationship.from_organization_id = child.id
 INNER JOIN chooseaerospace_prod_openedx.organizations_organization AS parent
-    ON parent.id = child.parent_organization_id
+    ON parent.id = relationship.to_organization_id
 WHERE child.short_name IN (
     'LibertyHS', 'CharlesPageHS', 'PryorHS', 'NewcastleHS', 'BartlesvilleHS',
     'BristowHS', 'OiltonHS', 'VanguardAcademy', 'MoorePublicSchoolsWestmoore',

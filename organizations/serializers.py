@@ -18,7 +18,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = models.Organization
         fields = ('id', 'created', 'modified', 'name', 'short_name', 'description', 'website_url', 'logo',
                   'city', 'state', 'zipcode', 'organization_type', 'education_level',
-                  'governance_type', 'parent_organization', 'active', 'logo_url',)
+                  'governance_type', 'parent_organizations', 'active', 'logo_url',)
         extra_kwargs = {
             'organization_type': {'required': False},
             'education_level': {'required': False},
@@ -63,7 +63,7 @@ def serialize_organization(organization):
         'organization_type': organization.organization_type,
         'education_level': organization.education_level,
         'governance_type': organization.governance_type,
-        'parent_organization': organization.parent_organization_id,
+        'parent_organizations': _parent_organization_ids(organization),
         'active': organization.active
     }
 
@@ -85,7 +85,7 @@ def serialize_organization_with_course(organization_course):
         'organization_type': organization_course.organization.organization_type,
         'education_level': organization_course.organization.education_level,
         'governance_type': organization_course.organization.governance_type,
-        'parent_organization': organization_course.organization.parent_organization_id,
+        'parent_organizations': _parent_organization_ids(organization_course.organization),
         'active': organization_course.organization.active,
         'course_id': organization_course.course_id
     }
@@ -103,7 +103,7 @@ def deserialize_organization(organization_dict):
     """
     Organization dict-to-object serialization
     """
-    return models.Organization(
+    organization = models.Organization(
         id=organization_dict.get('id'),
         name=organization_dict.get('name', ''),
         short_name=organization_dict.get('short_name', ''),
@@ -122,8 +122,26 @@ def deserialize_organization(organization_dict):
         governance_type=(
             organization_dict.get('governance_type') or models.Organization.GovernanceType.UNKNOWN
         ),
-        parent_organization_id=(
-            organization_dict.get('parent_organization_id') or organization_dict.get('parent_organization')
-        ),
         active=organization_dict.get('active', True)
     )
+    parent_organization_ids = organization_dict.get('parent_organizations')
+    if parent_organization_ids is None:
+        legacy_parent_id = organization_dict.get('parent_organization_id') or organization_dict.get(
+            'parent_organization'
+        )
+        parent_organization_ids = [legacy_parent_id] if legacy_parent_id else []
+    organization._parent_organization_ids = list(parent_organization_ids)  # pylint: disable=protected-access
+    return organization
+
+
+def _parent_organization_ids(organization):
+    """Return persisted or pending parent IDs for data-layer serialization."""
+    pending_ids = getattr(organization, '_parent_organization_ids', None)
+    if pending_ids is not None:
+        return pending_ids
+    if organization.pk is None:
+        return []
+    prefetched_parents = getattr(organization, '_prefetched_objects_cache', {}).get('parent_organizations')
+    if prefetched_parents is not None:
+        return [parent.id for parent in prefetched_parents]
+    return list(organization.parent_organizations.values_list('id', flat=True))

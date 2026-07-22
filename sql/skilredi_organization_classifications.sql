@@ -1,8 +1,9 @@
 -- Insert or backfill classifications for the SkilRedi Open edX site.
--- Run after organizations migration 0007_organization_and_parent_website_location.
+-- Run after organizations migration 0008_remove_historicalorganization_parent_organization_and_more.
 -- The unique short_name key makes
--- each statement idempotent. New records retain the source created, modified,
--- and active values. Existing records update the reviewed description plus
+-- each statement idempotent. New records retain the source created and modified
+-- values. Parent organizations are inactive; existing parent rows are updated
+-- to the same inactive status. Existing records update the reviewed description plus
 -- the seven location and classification fields listed in ON DUPLICATE KEY UPDATE.
 -- Incoming NULL locations preserve any location already stored on a duplicate.
 -- website_url stores the supporting organization page separately from the
@@ -24,27 +25,34 @@ START TRANSACTION;
 -- Parent organizations must be inserted before the child organizations that reference them.
 INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES
     -- Parent organization: Clemson University
-    ('Clemson University', 'Clemson', 'A public research university offering academic, continuing, and workforce education in Clemson, SC.', 'https://www.clemson.edu/', 'Clemson', 'SC', '29634', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'college_university', 'postsecondary', 'public'),
+    ('Clemson University', 'Clemson', 'A public research university offering academic, continuing, and workforce education in Clemson, SC.', 'https://www.clemson.edu/', 'Clemson', 'SC', '29634', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'college_university', 'postsecondary', 'public'),
+    -- Parent organization: South Carolina Department of Education
+    ('South Carolina Department of Education', 'SC-CTE', 'The state education agency supporting career and technical education programs across South Carolina.', 'https://ed.sc.gov/instruction/career-and-technical-education/', 'Columbia', 'SC', '29201', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'government_agency', 'secondary_adult', 'state_government'),
+    -- Parent organization: Spartanburg County School District Three
+    ('Spartanburg County School District Three', 'SpartanburgSD3', 'A public K-12 school district serving students and communities in Spartanburg County, SC.', 'https://www.spartanburg3.org/', 'Glendale', 'SC', '29346', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
+    -- Parent organization: Spartanburg County School District Seven
+    ('Spartanburg County School District Seven', 'SpartanburgSD7', 'A public K-12 school district serving students and communities in Spartanburg, SC.', 'https://www.spartanburg7.org/', 'Spartanburg', 'SC', '29307', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Colleton County School District
-    ('Colleton County School District', 'ColletonCountySD', 'A public K-12 school district serving Colleton County, SC.', 'https://www.colleton.k12.sc.us/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Colleton County School District', 'ColletonCountySD', 'A public K-12 school district serving Colleton County, SC.', 'https://www.colleton.k12.sc.us/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: School District of Pickens County
-    ('School District of Pickens County', 'PickensCountySD', 'A public K-12 school district serving Pickens County, SC.', 'https://www.pickens.k12.sc.us/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('School District of Pickens County', 'PickensCountySD', 'A public K-12 school district serving Pickens County, SC.', 'https://www.pickens.k12.sc.us/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Sumter School District
-    ('Sumter School District', 'SumterSD', 'A public K-12 school district serving Sumter County, SC.', 'https://www.sumterschools.net/', 'Sumter', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Sumter School District', 'SumterSD', 'A public K-12 school district serving Sumter County, SC.', 'https://www.sumterschools.net/', 'Sumter', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Greenville County Schools
-    ('Greenville County Schools', 'GreenvilleCS', 'A public K-12 school district for Greenville, SC.', 'https://www.greenville.k12.sc.us/', 'Greenville', 'SC', '29601', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Greenville County Schools', 'GreenvilleCS', 'A public K-12 school district for Greenville, SC.', 'https://www.greenville.k12.sc.us/', 'Greenville', 'SC', '29601', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Richland One School District
-    ('Richland One School District', 'RichlandOneSD', 'A public K-12 school district serving Columbia, SC.', 'https://www.richlandone.org/', 'Columbia', 'SC', '29201', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Richland One School District', 'RichlandOneSD', 'A public K-12 school district serving Columbia, SC.', 'https://www.richlandone.org/', 'Columbia', 'SC', '29201', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Lexington County School District Two
-    ('Lexington County School District Two', 'LexingtonTwoSD', 'A public K-12 school district serving communities in Lexington County, SC.', 'https://www.lex2.org/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Lexington County School District Two', 'LexingtonTwoSD', 'A public K-12 school district serving communities in Lexington County, SC.', 'https://www.lex2.org/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Richland School District Two
-    ('Richland School District Two', 'RichlandTwoSD', 'A public K-12 school district serving communities in Richland County, SC.', 'https://www.richland2.org/', 'Columbia', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Richland School District Two', 'RichlandTwoSD', 'A public K-12 school district serving communities in Richland County, SC.', 'https://www.richland2.org/', 'Columbia', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Kershaw County School District
-    ('Kershaw County School District', 'KershawCountySD', 'A public K-12 school district serving Kershaw County, SC.', 'https://www.kcsdschools.net/', 'Camden', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public'),
+    ('Kershaw County School District', 'KershawCountySD', 'A public K-12 school district serving Kershaw County, SC.', 'https://www.kcsdschools.net/', 'Camden', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Abbeville County School District
-    ('Abbeville County School District', 'AbbevilleCountySD', 'A public K-12 school district serving Abbeville County, SC.', 'https://www.acsdsc.org/', 'Abbeville', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'school_district', 'k12', 'public')
+    ('Abbeville County School District', 'AbbevilleCountySD', 'A public K-12 school district serving Abbeville County, SC.', 'https://www.acsdsc.org/', 'Abbeville', 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public')
 ON DUPLICATE KEY UPDATE
-    short_name = VALUES(short_name);
+    short_name = VALUES(short_name),
+    active = VALUES(active);
 
 INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('SkilRedi', 'SKILREDI', 'An online learning platform that delivers immersive technical education and workforce-development content.', 'https://skilredi.com', 'Greenville', 'SC', '29607', '2025-07-06 13:45:36.485378', '2026-06-10 14:19:33.794785', 1, 'education_technology', 'adult_workforce', 'private')
 ON DUPLICATE KEY UPDATE
@@ -381,16 +389,29 @@ ON DUPLICATE KEY UPDATE
     governance_type = VALUES(governance_type);
 
 -- Assign child organizations to the parent organizations inserted above.
-UPDATE skilredi_prod_openedx.organizations_organization AS child
+INSERT IGNORE INTO skilredi_prod_openedx.organizations_organization_parent_organizations (
+    from_organization_id,
+    to_organization_id
+)
+SELECT child.id, parent.id
+FROM skilredi_prod_openedx.organizations_organization AS child
 INNER JOIN (
     SELECT 'REVVED' AS child_short_name, 'Clemson' AS parent_short_name
     UNION ALL SELECT 'ThunderboltCTC', 'ColletonCountySD'
+    UNION ALL SELECT 'ThunderboltCTC', 'SC-CTE'
     UNION ALL SELECT 'GettysMS', 'PickensCountySD'
     UNION ALL SELECT 'PCCTC', 'PickensCountySD'
+    UNION ALL SELECT 'DanielMorganTC', 'SpartanburgSD3'
+    UNION ALL SELECT 'DanielMorganTC', 'SpartanburgSD7'
+    UNION ALL SELECT 'DanielMorganTC', 'SC-CTE'
     UNION ALL SELECT 'SumterCTC', 'SumterSD'
+    UNION ALL SELECT 'SumterCTC', 'SC-CTE'
     UNION ALL SELECT 'EnoreeCC', 'GreenvilleCS'
+    UNION ALL SELECT 'EnoreeCC', 'SC-CTE'
     UNION ALL SELECT 'HeywardCTC', 'RichlandOneSD'
+    UNION ALL SELECT 'HeywardCTC', 'SC-CTE'
     UNION ALL SELECT 'LexingtonTwoIC', 'LexingtonTwoSD'
+    UNION ALL SELECT 'LexingtonTwoIC', 'SC-CTE'
     UNION ALL SELECT 'LakeviewMS', 'GreenvilleCS'
     UNION ALL SELECT 'RichlandTwoInnovationCenter', 'RichlandTwoSD'
     UNION ALL SELECT 'CUCWD', 'Clemson'
@@ -401,9 +422,7 @@ INNER JOIN (
 ) AS relationship
     ON relationship.child_short_name = child.short_name
 INNER JOIN skilredi_prod_openedx.organizations_organization AS parent
-    ON parent.short_name = relationship.parent_short_name
-SET child.parent_organization_id = parent.id
-WHERE NOT (child.parent_organization_id <=> parent.id);
+    ON parent.short_name = relationship.parent_short_name;
 
 COMMIT;
 
@@ -428,18 +447,22 @@ SELECT
     child.short_name AS child_short_name,
     parent.short_name AS parent_short_name
 FROM skilredi_prod_openedx.organizations_organization AS child
+INNER JOIN skilredi_prod_openedx.organizations_organization_parent_organizations AS relationship
+    ON relationship.from_organization_id = child.id
 INNER JOIN skilredi_prod_openedx.organizations_organization AS parent
-    ON parent.id = child.parent_organization_id
+    ON parent.id = relationship.to_organization_id
 WHERE child.short_name = 'GCSBeckAcademy'
   AND parent.short_name = 'GreenvilleCS';
 
 -- Verification: every configured relationship should resolve to its expected parent.
 SELECT child.short_name AS child_short_name, parent.short_name AS parent_short_name
 FROM skilredi_prod_openedx.organizations_organization AS child
+INNER JOIN skilredi_prod_openedx.organizations_organization_parent_organizations AS relationship
+    ON relationship.from_organization_id = child.id
 INNER JOIN skilredi_prod_openedx.organizations_organization AS parent
-    ON parent.id = child.parent_organization_id
+    ON parent.id = relationship.to_organization_id
 WHERE child.short_name IN (
-    'REVVED', 'ThunderboltCTC', 'GettysMS', 'PCCTC', 'SumterCTC',
+    'REVVED', 'ThunderboltCTC', 'GettysMS', 'PCCTC', 'DanielMorganTC', 'SumterCTC',
     'EnoreeCC', 'HeywardCTC', 'LexingtonTwoIC', 'LakeviewMS',
     'RichlandTwoInnovationCenter', 'CUCWD', 'GCSBeckAcademy', 'WoolardTC',
     'AbbevilleCountyCC', 'HughesAcademy'

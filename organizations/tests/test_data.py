@@ -17,7 +17,7 @@ class OrganizationsDataTestCase(utils.OrganizationsTestCaseBase):
     """
     def test_create_organization(self):
         """ Unit Test: test_create_organization"""
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             organization = data.create_organization({
                 'name': 'local_organization',
                 'short_name': 'organizationX',
@@ -29,6 +29,6 @@ class OrganizationsDataTestCase(utils.OrganizationsTestCaseBase):
         """ Unit Test: test_fetch_organization"""
         organization1 = OrganizationFactory.create()
         organization2 = OrganizationFactory.create()
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(4):
             self.assertEqual(data.fetch_organization(organization1.id)['id'], organization1.id)
             self.assertEqual(data.fetch_organization(organization2.id)['id'], organization2.id)

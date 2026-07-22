@@ -33,7 +33,7 @@ class TestOrganizationSerializer(TestCase):
             "organization_type": self.organization.organization_type,
             "education_level": self.organization.education_level,
             "governance_type": self.organization.governance_type,
-            "parent_organization": None,
+            "parent_organizations": [],
             "active": self.organization.active,
             "created": self.organization.created.strftime(api_settings.DATETIME_FORMAT),
             "modified": self.organization.modified.strftime(api_settings.DATETIME_FORMAT)
@@ -61,19 +61,22 @@ class TestOrganizationSerializer(TestCase):
 
         self.assertEqual(organization.website_url, 'https://example.org/')
 
-    def test_parent_organization_is_serialized_as_an_id(self):
-        """The API should use the parent organization's stable database identifier."""
-        parent = OrganizationFactory.create()
-        child = OrganizationFactory.create(parent_organization=parent)
+    def test_parent_organizations_are_serialized_as_ids(self):
+        """The API should use each parent organization's stable database identifier."""
+        parents = OrganizationFactory.create_batch(2)
+        child = OrganizationFactory.create(parent_organizations=parents)
 
         self.assertEqual(
-            OrganizationSerializer(child).data['parent_organization'],
-            parent.id,
+            set(OrganizationSerializer(child).data['parent_organizations']),
+            {parent.id for parent in parents},
         )
 
         deserialized = deserialize_organization({
             'name': 'Child organization',
             'short_name': 'child_organization',
-            'parent_organization': parent.id,
+            'parent_organizations': [parent.id for parent in parents],
         })
-        self.assertEqual(deserialized.parent_organization_id, parent.id)
+        self.assertEqual(
+            deserialized._parent_organization_ids,  # pylint: disable=protected-access
+            [parent.id for parent in parents],
+        )

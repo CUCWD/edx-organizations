@@ -5,7 +5,6 @@ Organizations Admin Module Test Cases
 from unittest.mock import Mock, patch
 
 from django import forms
-from django.contrib import admin
 from django.contrib.admin.sites import AdminSite
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib.messages.storage.fallback import FallbackStorage
@@ -71,7 +70,7 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
                 'organization_type',
                 'education_level',
                 'governance_type',
-                'parent_organization',
+                'parent_organizations',
                 'child_organizations',
                 'sites',
                 'active',
@@ -94,47 +93,45 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
         self.assertTrue(classification_fields.issubset(self.org_admin.list_display))
         self.assertTrue(classification_fields.issubset(self.org_admin.search_fields))
 
-    def test_parent_organization_is_displayed_and_searchable(self):
+    def test_parent_organizations_are_displayed_and_searchable(self):
         """Parent organizations should be easy to find and assign in the admin."""
-        self.assertIn('parent_organization_link', self.org_admin.list_display)
-        self.assertEqual(self.org_admin.autocomplete_fields, ('parent_organization',))
+        self.assertIn('parent_organization_links', self.org_admin.list_display)
+        self.assertEqual(self.org_admin.autocomplete_fields, ('parent_organizations',))
+        self.assertIsInstance(
+            self.org_admin.get_form(self.request).base_fields['parent_organizations'].widget.widget,
+            AutocompleteSelectMultiple,
+        )
         self.assertIn(
             'parent-organization-autocomplete',
-            self.org_admin.get_form(self.request).base_fields['parent_organization'].widget.attrs['class'],
+            self.org_admin.get_form(self.request).base_fields['parent_organizations'].widget.attrs['class'],
         )
         self.assertEqual(
-            self.org_admin.get_form(self.request).base_fields['parent_organization'].widget.attrs['style'],
+            self.org_admin.get_form(self.request).base_fields['parent_organizations'].widget.attrs['style'],
             'width: 50em; max-width: 100%;',
         )
         self.assertEqual(
-            self.org_admin.get_form(self.request).base_fields['parent_organization'].widget.attrs['data-width'],
+            self.org_admin.get_form(self.request).base_fields['parent_organizations'].widget.attrs['data-width'],
             '50em',
         )
-        self.assertIn('parent_organization__name', self.org_admin.search_fields)
-        self.assertIn('parent_organization__short_name', self.org_admin.search_fields)
-        self.assertNotIn(
-            ('parent_organization', admin.RelatedOnlyFieldListFilter),
-            self.org_admin.list_filter,
-        )
+        self.assertIn('parent_organizations__name', self.org_admin.search_fields)
+        self.assertIn('parent_organizations__short_name', self.org_admin.search_fields)
 
-    def test_parent_organization_link_opens_full_change_page(self):
-        """The changelist should link a parent to its full Organization change page."""
-        parent = OrganizationFactory.create()
-        child = OrganizationFactory.create(parent_organization=parent)
-        parent_url = f'/admin/organizations/organization/{parent.pk}/change/'
+    def test_parent_organization_links_open_full_change_pages(self):
+        """The changelist should link parents to their full Organization change pages."""
+        parents = OrganizationFactory.create_batch(2)
+        child = OrganizationFactory.create(parent_organizations=parents)
 
-        with patch('organizations.admin.reverse', return_value=parent_url):
-            rendered_link = str(self.org_admin.parent_organization_link(child))
+        rendered_links = []
+        for parent in parents:
+            parent_url = f'/admin/organizations/organization/{parent.pk}/change/'
+            with patch('organizations.admin.reverse', return_value=parent_url):
+                rendered_links.append(str(self.org_admin.parent_organization_links(child)))
+            self.assertIn(parent_url, rendered_links[-1])
+            self.assertIn(str(parent), rendered_links[-1])
 
-        self.assertIn(parent_url, rendered_link)
-        self.assertIn(str(parent), rendered_link)
         self.assertEqual(
-            str(self.org_admin.parent_organization_link.short_description),
-            'District / Parent Organization',
-        )
-        self.assertEqual(
-            self.org_admin.parent_organization_link.admin_order_field,
-            'parent_organization__name',
+            str(self.org_admin.parent_organization_links.short_description),
+            'District / Parent Organizations',
         )
 
     def test_child_organizations_use_multi_select_autocomplete(self):
@@ -143,7 +140,7 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
         child = OrganizationFactory.create(
             name='Beck Academy',
             short_name='GCSBeckAcademy',
-            parent_organization=parent,
+            parent_organizations=(parent,),
         )
 
         form_class = self.org_admin.get_form(self.request, parent, change=True)
@@ -162,7 +159,8 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
         """Saving the reverse selector should assign and remove child parent IDs."""
         parent = OrganizationFactory.create()
         selected_child = OrganizationFactory.create()
-        removed_child = OrganizationFactory.create(parent_organization=parent)
+        other_parent = OrganizationFactory.create()
+        removed_child = OrganizationFactory.create(parent_organizations=(parent, other_parent))
         selected_children = Organization.objects.filter(pk=selected_child.pk)
         form = Mock(
             instance=parent,
@@ -173,22 +171,23 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
 
         selected_child.refresh_from_db()
         removed_child.refresh_from_db()
-        self.assertEqual(selected_child.parent_organization, parent)
-        self.assertIsNone(removed_child.parent_organization)
+        self.assertIn(parent, selected_child.parent_organizations.all())
+        self.assertNotIn(parent, removed_child.parent_organizations.all())
+        self.assertIn(other_parent, removed_child.parent_organizations.all())
 
     def test_child_organization_cannot_select_children(self):
         """The reverse selector should reject children on an organization that has a parent."""
         parent = OrganizationFactory.create()
-        child = OrganizationFactory.create(parent_organization=parent)
+        child = OrganizationFactory.create(parent_organizations=(parent,))
         proposed_grandchild = OrganizationFactory.create()
         form = OrganizationAdminForm(instance=child)
         self.assertTrue(form.fields['child_organizations'].disabled)
         self.assertIn(
-            'already has a parent',
+            'already has parents',
             str(form.fields['child_organizations'].help_text),
         )
         form.cleaned_data = {
-            'parent_organization': parent,
+            'parent_organizations': Organization.objects.filter(pk=parent.pk),
             'child_organizations': Organization.objects.filter(pk=proposed_grandchild.pk),
         }
 
@@ -198,23 +197,23 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
     def test_organizations_with_children_are_excluded_from_child_selector(self):
         """An existing parent should not be available for assignment as a child."""
         existing_parent = OrganizationFactory.create()
-        OrganizationFactory.create(parent_organization=existing_parent)
+        OrganizationFactory.create(parent_organizations=(existing_parent,))
         available_child = OrganizationFactory.create()
 
         form = OrganizationAdminForm(instance=existing_parent)
 
         self.assertNotIn(existing_parent, form.fields['child_organizations'].queryset)
         self.assertIn(available_child, form.fields['child_organizations'].queryset)
-        self.assertTrue(form.fields['parent_organization'].disabled)
+        self.assertTrue(form.fields['parent_organizations'].disabled)
         self.assertIn(
             'already has children',
-            str(form.fields['parent_organization'].help_text),
+            str(form.fields['parent_organizations'].help_text),
         )
 
     def test_child_organization_links_open_full_change_pages(self):
         """The form and changelist should link children to their full change pages."""
         parent = OrganizationFactory.create()
-        child = OrganizationFactory.create(parent_organization=parent)
+        child = OrganizationFactory.create(parent_organizations=(parent,))
         child_url = f'/admin/organizations/organization/{child.pk}/change/'
 
         with patch('organizations.admin.reverse', return_value=child_url):
@@ -228,10 +227,11 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
             'Child Organizations',
         )
 
-    def test_changelist_queryset_prefetches_child_organizations(self):
-        """The child link column should not cause one query per organization row."""
+    def test_changelist_queryset_prefetches_organization_relationships(self):
+        """Relationship link columns should not cause one query per organization row."""
         queryset = self.org_admin.get_queryset(self.request)
 
+        self.assertIn('parent_organizations', queryset._prefetch_related_lookups)  # pylint: disable=protected-access
         self.assertIn('child_organizations', queryset._prefetch_related_lookups)  # pylint: disable=protected-access
 
     def test_classification_fields_are_required_and_allow_unknown(self):

@@ -48,50 +48,52 @@ class TestOrganizationModel(TestCase):
             self.assertFalse(field.has_default())
 
     def test_parent_organization_relationship(self):
-        """An organization can reference another organization as its parent."""
-        parent = OrganizationFactory.create(
+        """An organization can reference multiple organizations as parents."""
+        district = OrganizationFactory.create(
             name='Greenville County Schools',
             short_name='GreenvilleCS',
             organization_type=Organization.OrganizationType.SCHOOL_DISTRICT,
             education_level=Organization.EducationLevel.K12,
             governance_type=Organization.GovernanceType.PUBLIC,
         )
-        child = OrganizationFactory.create(parent_organization=parent)
+        state_cte = OrganizationFactory.create(short_name='SC-CTE')
+        child = OrganizationFactory.create(parent_organizations=(district, state_cte))
 
-        self.assertEqual(child.parent_organization, parent)
-        self.assertEqual(list(parent.child_organizations.all()), [child])
+        self.assertEqual(set(child.parent_organizations.all()), {district, state_cte})
+        self.assertEqual(list(district.child_organizations.all()), [child])
+        self.assertEqual(list(state_cte.child_organizations.all()), [child])
 
     def test_organization_cannot_be_its_own_parent(self):
         """An organization cannot directly reference itself as its parent."""
-        self.organization.parent_organization = self.organization
+        self.organization.parent_organizations.add(self.organization)
 
         with self.assertRaises(ValidationError) as exception:
             self.organization.clean()
 
-        self.assertIn('parent_organization', exception.exception.message_dict)
+        self.assertIn('parent_organizations', exception.exception.message_dict)
 
     def test_child_organization_cannot_be_a_parent(self):
         """An organization hierarchy cannot extend beyond parent and child."""
         parent = OrganizationFactory.create()
-        child = OrganizationFactory.create(parent_organization=parent)
-        grandchild = OrganizationFactory.build(parent_organization=child)
+        child = OrganizationFactory.create(parent_organizations=(parent,))
+        grandchild = OrganizationFactory.create(parent_organizations=(child,))
 
         with self.assertRaises(ValidationError) as exception:
             grandchild.clean()
 
-        self.assertIn('parent_organization', exception.exception.message_dict)
+        self.assertIn('parent_organizations', exception.exception.message_dict)
 
     def test_parent_with_children_cannot_become_a_child(self):
         """An existing parent cannot itself be assigned beneath another organization."""
         new_parent = OrganizationFactory.create()
         existing_parent = OrganizationFactory.create()
-        OrganizationFactory.create(parent_organization=existing_parent)
-        existing_parent.parent_organization = new_parent
+        OrganizationFactory.create(parent_organizations=(existing_parent,))
+        existing_parent.parent_organizations.add(new_parent)
 
         with self.assertRaises(ValidationError) as exception:
             existing_parent.clean()
 
-        self.assertIn('parent_organization', exception.exception.message_dict)
+        self.assertIn('parent_organizations', exception.exception.message_dict)
 
     def test_organization_website_url_field(self):
         """Organizations use a dedicated validated URL field."""

@@ -332,15 +332,14 @@ class Organization(TimeStampedModel):
         db_index=True,
     )
 
-    parent_organization = models.ForeignKey(
+    parent_organizations = models.ManyToManyField(
         'self',
-        verbose_name='District / Parent Organization',
+        verbose_name='District / Parent Organizations',
         related_name='child_organizations',
-        on_delete=models.SET_NULL,
-        null=True,
+        symmetrical=False,
         blank=True,
         help_text=_(
-            'Optional district or parent organization. Create it as an organization before assigning it.'
+            'Optional districts or parent organizations. Create them as organizations before assigning them.'
         ),
     )
 
@@ -361,19 +360,20 @@ class Organization(TimeStampedModel):
             raise ValidationError(_('Please do not use spaces or special characters in the short name '
                                     'field. Only allowed special characters are period (.), hyphen (-) '
                                     'and underscore (_).'))
-        if self.pk is not None and self.parent_organization_id == self.pk:
-            raise ValidationError({'parent_organization': _('An organization cannot be its own parent.')})
-        if self.parent_organization_id is not None:
-            if Organization.objects.filter(
-                pk=self.parent_organization_id,
-                parent_organization__isnull=False,
+        if self.pk is not None:
+            if self.parent_organizations.filter(pk=self.pk).exists():  # pylint: disable=no-member
+                raise ValidationError({'parent_organizations': _('An organization cannot be its own parent.')})
+            if (  # pylint: disable=no-member
+                self.parent_organizations.exists() and self.child_organizations.exists()
+            ):
+                raise ValidationError({
+                    'parent_organizations': _('An organization with child organizations cannot have parents.')
+                })
+            if self.parent_organizations.filter(  # pylint: disable=no-member
+                parent_organizations__isnull=False
             ).exists():
                 raise ValidationError({
-                    'parent_organization': _('A child organization cannot be selected as a parent organization.')
-                })
-            if self.pk is not None and self.child_organizations.exists():
-                raise ValidationError({
-                    'parent_organization': _('An organization with child organizations cannot have a parent.')
+                    'parent_organizations': _('A child organization cannot be selected as a parent organization.')
                 })
 
 
