@@ -34,7 +34,12 @@ class TestAddOrganizationCommand(TestCase):
 
     def test_add_existing_org(self):
         Organization.objects.create(
-            short_name=self.ORG_SHORT_NAME, name=self.ORG_NAME, active=False
+            short_name=self.ORG_SHORT_NAME,
+            name=self.ORG_NAME,
+            organization_type=Organization.OrganizationType.UNKNOWN,
+            education_level=Organization.EducationLevel.UNKNOWN,
+            governance_type=Organization.GovernanceType.UNKNOWN,
+            active=False,
         )
         call_command('add_organization', self.ORG_SHORT_NAME, self.ORG_NAME)
         self.assert_one_active_organization(self.ORG_SHORT_NAME, self.ORG_NAME)

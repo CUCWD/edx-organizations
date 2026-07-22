@@ -89,6 +89,9 @@ class TestOrganizationsView(TestCase):
         self.assertEqual(response.data['name'], org_data['name'])
         self.assertEqual(response.data['short_name'], org_data['short_name'])
         self.assertEqual(response.data['description'], org_data['description'])
+        self.assertEqual(response.data['organization_type'], Organization.OrganizationType.UNKNOWN)
+        self.assertEqual(response.data['education_level'], Organization.EducationLevel.UNKNOWN)
+        self.assertEqual(response.data['governance_type'], Organization.GovernanceType.UNKNOWN)
         orgs = Organization.objects.all()
         self.assertEqual(len(orgs), 2)
 
