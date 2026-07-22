@@ -1,0 +1,17 @@
+{% load i18n %}
+<details data-filter-title="{{ title }}" open>
+  <summary>
+    {% blocktranslate with filter_title=title %} By {{ filter_title }} {% endblocktranslate %}
+  </summary>
+  <ul>
+  {% for choice in choices %}
+    {% if choice.is_group %}
+      <li class="filter-group"><strong>{{ choice.display }}</strong></li>
+    {% else %}
+      <li{% if choice.selected %} class="selected"{% endif %}>
+        <a href="{{ choice.query_string|iriencode }}">{{ choice.display }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+  </ul>
+</details>

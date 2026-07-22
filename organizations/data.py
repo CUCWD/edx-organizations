@@ -109,6 +109,7 @@ def create_organization(organization):
         'short_name': string,
         'name': string,
         'description': string (optional),
+        'website_url': string (optional),
         'logo': string (optional),
     }
 
@@ -132,7 +133,12 @@ def create_organization(organization):
             short_name=organization_obj.short_name,
             name=organization_obj.name,
             description=organization_obj.description,
+            website_url=organization_obj.website_url,
             logo=organization_obj.logo,
+            organization_type=organization_obj.organization_type,
+            education_level=organization_obj.education_level,
+            governance_type=organization_obj.governance_type,
+            parent_organization_id=organization_obj.parent_organization_id,
             active=True
         )
     return serializers.serialize_organization(organization)
@@ -259,7 +265,12 @@ def update_organization(organization):
         organization.name = organization_obj.name
         organization.short_name = organization_obj.short_name
         organization.description = organization_obj.description
+        organization.website_url = organization_obj.website_url
         organization.logo = organization_obj.logo
+        organization.organization_type = organization_obj.organization_type
+        organization.education_level = organization_obj.education_level
+        organization.governance_type = organization_obj.governance_type
+        organization.parent_organization_id = organization_obj.parent_organization_id
         organization.active = organization_obj.active
     except internal.Organization.DoesNotExist:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)

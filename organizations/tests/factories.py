@@ -32,5 +32,9 @@ class OrganizationFactory(DjangoModelFactory):
     name = factory.Sequence(lambda arg: f'organization name {arg}')
     short_name = factory.Sequence(lambda arg: f'name{arg}')
     description = factory.Sequence(lambda arg: f'description{arg}')
+    website_url = factory.Sequence(lambda arg: f'https://organization{arg}.example.com/')
     logo = None
+    organization_type = Organization.OrganizationType.UNKNOWN
+    education_level = Organization.EducationLevel.UNKNOWN
+    governance_type = Organization.GovernanceType.UNKNOWN
     active = True
