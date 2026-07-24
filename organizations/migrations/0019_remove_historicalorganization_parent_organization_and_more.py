@@ -35,7 +35,7 @@ def restore_single_parent_organization(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("organizations", "0007_organization_and_parent_website_location"),
+        ("organizations", "0018_organization_and_parent_website_location"),
     ]
 
     operations = [
