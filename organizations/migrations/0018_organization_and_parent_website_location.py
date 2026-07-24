@@ -20,7 +20,7 @@ def copy_standalone_description_urls(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('organizations', '0006_organization_classifications_and_parent'),
+        ("organizations", "0017_organization_classifications_and_parent"),
     ]
 
     operations = [

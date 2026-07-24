@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('organizations', '0005_historicalorganization_city_and_more'),
+        ("organizations", "0016_restore_organizationcourse_options"),
     ]
 
     operations = [
