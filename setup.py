@@ -68,5 +68,6 @@ setup(
         'Programming Language :: Python :: 3.12',
     ],
     packages=find_packages(exclude=['tests']),
+    include_package_data=True,
     install_requires=load_requirements('requirements/base.in'),
 )
