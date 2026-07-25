@@ -56,7 +56,7 @@ class TestOrganizationModel(TestCase):
             education_level=Organization.EducationLevel.K12,
             governance_type=Organization.GovernanceType.PUBLIC,
         )
-        state_cte = OrganizationFactory.create(short_name='SC-CTE')
+        state_cte = OrganizationFactory.create(short_name='SCCTE')
         child = OrganizationFactory.create(parent_organizations=(district, state_cte))
 
         self.assertEqual(set(child.parent_organizations.all()), {district, state_cte})
