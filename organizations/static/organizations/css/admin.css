@@ -1,0 +1,33 @@
+/* Make organization relationship selectors useful for long organization names. */
+select.parent-organization-autocomplete,
+select.parent-organization-autocomplete + .select2-container {
+    width: min(50em, calc(100% - 8em)) !important;
+}
+
+.field-parent_organizations .flex-container {
+    flex-wrap: wrap;
+}
+
+.field-parent_organizations .related-widget-wrapper {
+    flex: 0 0 min(58em, 100%);
+    width: min(58em, 100%);
+    max-width: 100%;
+    overflow: visible;
+}
+
+select.child-organizations-autocomplete,
+select.child-organizations-autocomplete + .select2-container {
+    width: min(50em, 100%) !important;
+}
+
+/* Keep changelist headings visible while scrolling large organization tables. */
+body.change-list #changelist-form .results {
+    max-height: calc(100vh - 14rem);
+    overflow: auto;
+}
+
+body.change-list #result_list thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}

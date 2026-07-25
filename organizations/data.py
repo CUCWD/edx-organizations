@@ -109,6 +109,7 @@ def create_organization(organization):
         'short_name': string,
         'name': string,
         'description': string (optional),
+        'website_url': string (optional),
         'logo': string (optional),
     }
 
@@ -132,9 +133,17 @@ def create_organization(organization):
             short_name=organization_obj.short_name,
             name=organization_obj.name,
             description=organization_obj.description,
+            website_url=organization_obj.website_url,
             logo=organization_obj.logo,
+            organization_type=organization_obj.organization_type,
+            education_level=organization_obj.education_level,
+            governance_type=organization_obj.governance_type,
             active=True
         )
+        if organization_obj._parent_organization_ids:  # pylint: disable=protected-access
+            organization.parent_organizations.set(
+                organization_obj._parent_organization_ids  # pylint: disable=protected-access
+            )
     return serializers.serialize_organization(organization)
 
 
@@ -241,6 +250,11 @@ def bulk_create_organizations(organizations, dry_run=False, activate=True):
     if not dry_run:
         organizations_to_reactivate.update(active=True)
         internal.Organization.objects.bulk_create(organizations_to_create)
+        for organization in organizations_to_create:
+            if organization._parent_organization_ids:  # pylint: disable=protected-access
+                organization.parent_organizations.set(
+                    organization._parent_organization_ids  # pylint: disable=protected-access
+                )
 
     return (
         short_names_of_organizations_to_create,
@@ -259,7 +273,17 @@ def update_organization(organization):
         organization.name = organization_obj.name
         organization.short_name = organization_obj.short_name
         organization.description = organization_obj.description
+        organization.website_url = organization_obj.website_url
         organization.logo = organization_obj.logo
+        organization.organization_type = organization_obj.organization_type
+        organization.education_level = organization_obj.education_level
+        organization.governance_type = organization_obj.governance_type
+        organization.parent_organizations.set(
+            organization_obj._parent_organization_ids  # pylint: disable=protected-access
+        )
+        organization._parent_organization_ids = (  # pylint: disable=protected-access
+            organization_obj._parent_organization_ids  # pylint: disable=protected-access
+        )
         organization.active = organization_obj.active
     except internal.Organization.DoesNotExist:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)
@@ -284,7 +308,7 @@ def fetch_organization(organization_id):
     if not organization_id:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)
     organizations = serializers.serialize_organizations(
-        internal.Organization.objects.filter(id=organization_id, active=True)
+        internal.Organization.objects.filter(id=organization_id, active=True).prefetch_related('parent_organizations')
     )
     if not organizations:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)
@@ -299,9 +323,11 @@ def fetch_organization_by_short_name(organization_short_name):
     organization = {'short_name': organization_short_name}
     if not organization_short_name:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)
-    organizations = serializers.serialize_organizations(internal.Organization.objects.filter(
-        active=True, short_name=organization_short_name
-    ))
+    organizations = serializers.serialize_organizations(
+        internal.Organization.objects.filter(
+            active=True, short_name=organization_short_name
+        ).prefetch_related('parent_organizations')
+    )
     if not organizations:
         exceptions.raise_exception("organization", organization, exceptions.InvalidOrganizationException)
     return organizations[0]
@@ -312,7 +338,9 @@ def fetch_organizations():
     Retrieves the set of active organizations from app/local state
     Returns a list-of-dicts representation of the object
     """
-    return serializers.serialize_organizations(internal.Organization.objects.filter(active=True))
+    return serializers.serialize_organizations(
+        internal.Organization.objects.filter(active=True).prefetch_related('parent_organizations')
+    )
 
 
 def create_organization_course(organization, course_key):
