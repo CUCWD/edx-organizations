@@ -111,7 +111,7 @@ class TestOrganizationModel(TestCase):
         self.assertEqual(organization_types, {
             'k12_school',
             'school_district',
-            'career_technical_center',
+            'career_technical_education',
             'homeschool',
             'college_university',
             'training_provider',

@@ -316,7 +316,7 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
         organization = Organization.objects.create(
             name='Test technical center',
             short_name='test_technical_center',
-            organization_type=Organization.OrganizationType.CAREER_TECHNICAL_CENTER,
+            organization_type=Organization.OrganizationType.CAREER_TECHNICAL_EDUCATION,
             education_level=Organization.EducationLevel.SECONDARY_ADULT,
             governance_type=Organization.GovernanceType.PUBLIC,
         )
@@ -324,7 +324,7 @@ class OrganizationsAdminTestCase(utils.OrganizationsTestCaseBase):
         results, _ = self.org_admin.get_search_results(
             self.request,
             Organization.objects.all(),
-            str(Organization.OrganizationType.CAREER_TECHNICAL_CENTER.label),
+            str(Organization.OrganizationType.CAREER_TECHNICAL_EDUCATION.label),
         )
 
         self.assertEqual(list(results), [organization])

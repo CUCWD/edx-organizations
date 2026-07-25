@@ -13,7 +13,7 @@
 -- could not be verified.
 --
 -- Current organization_type values used by the application are:
--- k12_school, school_district, career_technical_center, homeschool,
+-- k12_school, school_district, career_technical_education, homeschool,
 -- college_university, training_provider, workforce_agency,
 -- education_nonprofit, education_technology, employer, government_agency,
 -- internal_program, other, and unknown.
@@ -109,7 +109,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Thunderbolt Career and Technology Center', 'ThunderboltCTC', 'Provides career and technical education and workforce preparation for secondary students in Walterboro, SC.', 'https://tctc.colleton.k12.sc.us/o/tct', 'Walterboro', 'SC', '29488', '2025-08-19 16:00:27.075956', '2025-08-19 16:00:27.075956', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Thunderbolt Career and Technology Center', 'ThunderboltCTC', 'Provides career and technical education and workforce preparation for secondary students in Walterboro, SC.', 'https://tctc.colleton.k12.sc.us/o/tct', 'Walterboro', 'SC', '29488', '2025-08-19 16:00:27.075956', '2025-08-19 16:00:27.075956', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -131,7 +131,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Pickens County Career and Technology Center', 'PCCTC', 'Provides career and technical education and workforce preparation for secondary students in Liberty, SC.', 'https://ctc.pickens.k12.sc.us/o/ctc/', 'Liberty', 'SC', '29657', '2025-08-20 14:12:53.145898', '2025-12-09 18:44:40.801325', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Pickens County Career and Technology Center', 'PCCTC', 'Provides career and technical education and workforce preparation for secondary students in Liberty, SC.', 'https://ctc.pickens.k12.sc.us/o/ctc/', 'Liberty', 'SC', '29657', '2025-08-20 14:12:53.145898', '2025-12-09 18:44:40.801325', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -142,7 +142,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Daniel Morgan Technology Center', 'DanielMorganTC', 'Provides career and technical education and workforce preparation for secondary students in Spartanburg, SC.', 'https://www.dmtconline.org/o/dmts', 'Spartanburg', 'SC', '29307', '2025-08-20 14:21:45.027315', '2025-08-20 14:21:45.027315', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Daniel Morgan Technology Center', 'DanielMorganTC', 'Provides career and technical education and workforce preparation for secondary students in Spartanburg, SC.', 'https://www.dmtconline.org/o/dmts', 'Spartanburg', 'SC', '29307', '2025-08-20 14:21:45.027315', '2025-08-20 14:21:45.027315', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -153,7 +153,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Sumter Career and Technology Center', 'SumterCTC', 'Provides career and technical education and workforce preparation for secondary students in Sumter, SC.', 'https://sctc.sumterschools.net/', 'Sumter', 'SC', '29154', '2025-08-20 14:23:20.466770', '2025-08-20 14:23:20.466770', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Sumter Career and Technology Center', 'SumterCTC', 'Provides career and technical education and workforce preparation for secondary students in Sumter, SC.', 'https://sctc.sumterschools.net/', 'Sumter', 'SC', '29154', '2025-08-20 14:23:20.466770', '2025-08-20 14:23:20.466770', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -164,7 +164,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Enoree Career Center', 'EnoreeCC', 'Provides career and technical education and workforce preparation for secondary students in Greenville, SC.', 'https://www.greenville.k12.sc.us/enoree/', 'Greenville', 'SC', '29617', '2025-08-20 14:25:28.419342', '2025-08-20 14:25:28.419342', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Enoree Career Center', 'EnoreeCC', 'Provides career and technical education and workforce preparation for secondary students in Greenville, SC.', 'https://www.greenville.k12.sc.us/enoree/', 'Greenville', 'SC', '29617', '2025-08-20 14:25:28.419342', '2025-08-20 14:25:28.419342', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -175,7 +175,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Heyward Career and Technology Center', 'HeywardCTC', 'Provides career and technical education and workforce preparation for secondary students in Columbia, SC.', 'https://heyward.richlandone.org/', 'Columbia', 'SC', '29204', '2025-08-28 15:14:32.304989', '2025-12-09 18:44:31.429687', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Heyward Career and Technology Center', 'HeywardCTC', 'Provides career and technical education and workforce preparation for secondary students in Columbia, SC.', 'https://heyward.richlandone.org/', 'Columbia', 'SC', '29204', '2025-08-28 15:14:32.304989', '2025-12-09 18:44:31.429687', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -186,7 +186,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Lexington Two Innovation Center', 'LexingtonTwoIC', 'Provides career and technical education and workforce preparation for secondary students in Cayce, SC.', 'https://l2ic.lex2.org/', 'Cayce', 'SC', '29033', '2025-08-28 16:57:50.372410', '2026-06-23 19:30:47.350772', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Lexington Two Innovation Center', 'LexingtonTwoIC', 'Provides career and technical education and workforce preparation for secondary students in Cayce, SC.', 'https://l2ic.lex2.org/', 'Cayce', 'SC', '29033', '2025-08-28 16:57:50.372410', '2026-06-23 19:30:47.350772', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -242,7 +242,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Richland Two Innovation Center', 'RichlandTwoInnovationCenter', 'Provides career and technical education and workforce preparation for secondary students in Columbia, SC.', 'https://r2i2.org/', 'Columbia', 'SC', '29223', '2026-02-10 20:09:35.227286', '2026-02-10 20:09:35.227286', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Richland Two Innovation Center', 'RichlandTwoInnovationCenter', 'Provides career and technical education and workforce preparation for secondary students in Columbia, SC.', 'https://r2i2.org/', 'Columbia', 'SC', '29223', '2026-02-10 20:09:35.227286', '2026-02-10 20:09:35.227286', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -333,7 +333,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Woolard Technology Center', 'WoolardTC', 'Provides career and technical education and workforce preparation for secondary students in Camden, SC.', 'https://www.kcsdschools.net/', 'Camden', 'SC', '29020', '2026-06-01 18:53:45.802345', '2026-06-01 18:53:45.802345', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Woolard Technology Center', 'WoolardTC', 'Provides career and technical education and workforce preparation for secondary students in Camden, SC.', 'https://www.kcsdschools.net/', 'Camden', 'SC', '29020', '2026-06-01 18:53:45.802345', '2026-06-01 18:53:45.802345', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -344,7 +344,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Abbeville County Career Center', 'AbbevilleCountyCC', 'Provides career and technical education and workforce preparation for secondary students in Abbeville, SC.', 'https://www.acsdsc.org/', 'Abbeville', 'SC', '29620', '2026-06-01 19:43:28.008023', '2026-06-01 19:43:28.008023', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Abbeville County Career Center', 'AbbevilleCountyCC', 'Provides career and technical education and workforce preparation for secondary students in Abbeville, SC.', 'https://www.acsdsc.org/', 'Abbeville', 'SC', '29620', '2026-06-01 19:43:28.008023', '2026-06-01 19:43:28.008023', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -366,7 +366,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Dorchester County Career Technology Center', 'DorchesterCountyCTC', 'Provides career and technical education and workforce preparation for secondary students in Dorchester, SC.', 'https://www.dcctc.net/', 'Dorchester', 'SC', '29437', '2026-06-22 15:34:55.028398', '2026-06-22 15:34:55.028398', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Dorchester County Career Technology Center', 'DorchesterCountyCTC', 'Provides career and technical education and workforce preparation for secondary students in Dorchester, SC.', 'https://www.dcctc.net/', 'Dorchester', 'SC', '29437', '2026-06-22 15:34:55.028398', '2026-06-22 15:34:55.028398', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -432,7 +432,7 @@ SELECT COUNT(*) AS classified_organization_count
 FROM skilredi_prod_openedx.organizations_organization
 WHERE short_name IN ('SKILREDI', 'RECITEXR', 'AIDT', 'REVVED', 'TridentTC', 'ThunderboltCTC', 'GettysMS', 'PCCTC', 'DanielMorganTC', 'SumterCTC', 'EnoreeCC', 'HeywardCTC', 'LexingtonTwoIC', 'PiedmontTC', 'Clemson', 'LakeviewMS', 'TCLowcountry', 'RichlandTwoInnovationCenter', 'DenmarkTC', 'GreenvilleTC', 'CUCWD', 'GreenvilleCS', 'GCSBeckAcademy', 'AndersonSD4', 'RichlandOneSD', 'WoolardTC', 'AbbevilleCountyCC', 'HughesAcademy', 'DorchesterCountyCTC', 'MonroeCountyCC')
   AND organization_type IN (
-    'k12_school', 'school_district', 'career_technical_center', 'homeschool',
+    'k12_school', 'school_district', 'career_technical_education', 'homeschool',
     'college_university', 'training_provider', 'workforce_agency',
     'education_nonprofit', 'education_technology', 'employer',
     'government_agency', 'internal_program', 'other', 'unknown'

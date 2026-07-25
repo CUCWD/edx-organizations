@@ -106,7 +106,7 @@ class Organization(TimeStampedModel):
         # Schools and education agencies
         K12_SCHOOL = 'k12_school', _('K-12 School')
         SCHOOL_DISTRICT = 'school_district', _('School District or Education Agency')
-        CAREER_TECHNICAL_CENTER = 'career_technical_center', _('Career/Technical or Trade School')
+        CAREER_TECHNICAL_EDUCATION = 'career_technical_education', _('Career & Technical Education Center')
         HOMESCHOOL = 'homeschool', _('Homeschool')
 
         # Postsecondary, training, and workforce
@@ -204,7 +204,7 @@ class Organization(TimeStampedModel):
         (_('Schools and education agencies'), (
             OrganizationType.K12_SCHOOL,
             OrganizationType.SCHOOL_DISTRICT,
-            OrganizationType.CAREER_TECHNICAL_CENTER,
+            OrganizationType.CAREER_TECHNICAL_EDUCATION,
             OrganizationType.HOMESCHOOL,
         )),
         (_('Postsecondary, training, and workforce'), (

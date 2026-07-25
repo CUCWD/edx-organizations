@@ -13,7 +13,7 @@
 -- could not be verified.
 --
 -- Current organization_type values used by the application are:
--- k12_school, school_district, career_technical_center, homeschool,
+-- k12_school, school_district, career_technical_education, homeschool,
 -- college_university, training_provider, workforce_agency,
 -- education_nonprofit, education_technology, employer, government_agency,
 -- internal_program, other, and unknown.
@@ -161,7 +161,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bethlehem Area Vocational-Technical School', 'BethlehemAVTS', 'Provides career and technical education and workforce preparation for secondary and adult learners in Bethlehem, PA.', 'https://www.bethlehemavts.org/', 'Bethlehem', 'PA', '18020', '2024-09-12 02:12:45.995474', '2024-09-12 02:12:45.995474', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bethlehem Area Vocational-Technical School', 'BethlehemAVTS', 'Provides career and technical education and workforce preparation for secondary and adult learners in Bethlehem, PA.', 'https://www.bethlehemavts.org/', 'Bethlehem', 'PA', '18020', '2024-09-12 02:12:45.995474', '2024-09-12 02:12:45.995474', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -172,7 +172,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Metro Technology Centers', 'MetroTC', 'Provides career and technical training at its Aviation Career Campus in Oklahoma City.', 'https://www.metrotech.edu/about/locations/aviation-campus', 'Oklahoma City', 'OK', '73179', '2024-09-12 02:13:55.868008', '2024-09-12 02:14:15.055424', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Metro Technology Centers', 'MetroTC', 'Provides career and technical training at its Aviation Career Campus in Oklahoma City.', 'https://www.metrotech.edu/about/locations/aviation-campus', 'Oklahoma City', 'OK', '73179', '2024-09-12 02:13:55.868008', '2024-09-12 02:14:15.055424', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -238,7 +238,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Great Plains Technology Center', 'GreatPlainsTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Lawton, OK.', 'https://www.greatplains.edu/', 'Lawton', 'OK', '73505', '2024-09-12 02:21:29.869704', '2024-09-12 02:21:39.238717', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Great Plains Technology Center', 'GreatPlainsTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Lawton, OK.', 'https://www.greatplains.edu/', 'Lawton', 'OK', '73505', '2024-09-12 02:21:29.869704', '2024-09-12 02:21:39.238717', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -327,7 +327,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Payette River Technical Academy', 'PayetteRiverTA', 'A public charter school providing project-based career and technical education for secondary students.', 'https://www.pr2ta.com/', 'Emmett', 'ID', '83617', '2024-09-12 02:30:59.785680', '2024-09-12 02:30:59.785680', 1, 'career_technical_center', 'secondary', 'public_charter')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Payette River Technical Academy', 'PayetteRiverTA', 'A public charter school providing project-based career and technical education for secondary students.', 'https://www.pr2ta.com/', 'Emmett', 'ID', '83617', '2024-09-12 02:30:59.785680', '2024-09-12 02:30:59.785680', 1, 'career_technical_education', 'secondary', 'public_charter')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -371,7 +371,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Somerset County Technology Center', 'SomersetCTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Somerset, PA.', 'https://sctc.net/', 'Somerset', 'PA', '15501', '2024-09-12 02:34:54.410241', '2024-09-12 02:34:54.410241', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Somerset County Technology Center', 'SomersetCTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Somerset, PA.', 'https://sctc.net/', 'Somerset', 'PA', '15501', '2024-09-12 02:34:54.410241', '2024-09-12 02:34:54.410241', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -393,7 +393,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('US Aviation Academy', 'USAviationAcademy', 'Provides professional pilot and aviation maintenance technician training.', 'https://www.usaviationacademy.com/', 'Denton', 'TX', '76207', '2024-09-12 02:36:36.748071', '2024-09-12 02:36:36.748071', 1, 'career_technical_center', 'postsecondary_nondegree', 'private_for_profit')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('US Aviation Academy', 'USAviationAcademy', 'Provides professional pilot and aviation maintenance technician training.', 'https://www.usaviationacademy.com/', 'Denton', 'TX', '76207', '2024-09-12 02:36:36.748071', '2024-09-12 02:36:36.748071', 1, 'career_technical_education', 'postsecondary_nondegree', 'private_for_profit')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -494,7 +494,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Workforce Training Academy USA LLC', 'WTA4USA', 'A private specialty trade school providing hands-on career and technical training.', 'https://wta4usa.com/', 'Tucson', 'AZ', '85714', '2024-09-12 02:49:15.995816', '2024-09-12 02:49:15.995816', 1, 'career_technical_center', 'postsecondary_nondegree', 'private_for_profit')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Workforce Training Academy USA LLC', 'WTA4USA', 'A private specialty trade school providing hands-on career and technical training.', 'https://wta4usa.com/', 'Tucson', 'AZ', '85714', '2024-09-12 02:49:15.995816', '2024-09-12 02:49:15.995816', 1, 'career_technical_education', 'postsecondary_nondegree', 'private_for_profit')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -549,7 +549,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Southern Tech Center Aviation', 'SouthernTech', 'Provides career and technical education, including aviation maintenance training, for secondary and adult learners.', 'https://www.sotech.edu/', 'Ardmore', 'OK', '73401', '2024-09-12 02:55:18.011806', '2024-09-12 02:55:18.011806', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Southern Tech Center Aviation', 'SouthernTech', 'Provides career and technical education, including aviation maintenance training, for secondary and adult learners.', 'https://www.sotech.edu/', 'Ardmore', 'OK', '73401', '2024-09-12 02:55:18.011806', '2024-09-12 02:55:18.011806', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -615,7 +615,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Gateway Academy', 'GatewayAcademy', 'A Christian County Schools career and technical academy offering hands-on programs in technology, health sciences, skilled trades, and other career pathways.', 'https://gatewayacademy.christian.kyschools.us/', 'Hopkinsville', 'KY', '42240', '2024-09-12 03:19:25.557565', '2024-09-12 03:19:25.557565', 1, 'career_technical_center', 'high_school', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Gateway Academy', 'GatewayAcademy', 'A Christian County Schools career and technical academy offering hands-on programs in technology, health sciences, skilled trades, and other career pathways.', 'https://gatewayacademy.christian.kyschools.us/', 'Hopkinsville', 'KY', '42240', '2024-09-12 03:19:25.557565', '2024-09-12 03:19:25.557565', 1, 'career_technical_education', 'high_school', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -671,7 +671,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Polaris Career Center', 'PolarisCC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Middleburg Heights, OH.', 'https://www.polaris.edu/', 'Middleburg Heights', 'OH', '44130', '2024-09-12 03:30:53.954305', '2024-09-12 03:30:53.954305', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Polaris Career Center', 'PolarisCC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Middleburg Heights, OH.', 'https://www.polaris.edu/', 'Middleburg Heights', 'OH', '44130', '2024-09-12 03:30:53.954305', '2024-09-12 03:30:53.954305', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -704,7 +704,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Southwest Technology Center', 'SWTech', 'Provides career and technical education and workforce preparation for secondary and adult learners in Altus, OK.', 'https://www.swtech.edu/', 'Altus', 'OK', '73521', '2024-09-12 03:34:26.200439', '2024-09-12 03:34:26.200439', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Southwest Technology Center', 'SWTech', 'Provides career and technical education and workforce preparation for secondary and adult learners in Altus, OK.', 'https://www.swtech.edu/', 'Altus', 'OK', '73521', '2024-09-12 03:34:26.200439', '2024-09-12 03:34:26.200439', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -826,7 +826,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Butler Tech', 'ButlerTech', 'Provides career and technical education and workforce preparation for secondary and adult learners in Fairfield Township, OH.', 'https://www.butlertech.org/', 'Fairfield Township', 'OH', '45011', '2024-09-12 04:01:43.197740', '2024-09-12 04:01:43.197740', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Butler Tech', 'ButlerTech', 'Provides career and technical education and workforce preparation for secondary and adult learners in Fairfield Township, OH.', 'https://www.butlertech.org/', 'Fairfield Township', 'OH', '45011', '2024-09-12 04:01:43.197740', '2024-09-12 04:01:43.197740', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -903,7 +903,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Mid-Del Technology Center', 'MidDelTechCenter', 'Provides career and technical education and workforce preparation for secondary and adult learners in Midwest City, OK.', 'https://www.mid-del.net/', 'Midwest City', 'OK', '73110', '2024-09-13 15:44:38.236857', '2024-09-13 15:44:38.236857', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Mid-Del Technology Center', 'MidDelTechCenter', 'Provides career and technical education and workforce preparation for secondary and adult learners in Midwest City, OK.', 'https://www.mid-del.net/', 'Midwest City', 'OK', '73110', '2024-09-13 15:44:38.236857', '2024-09-13 15:44:38.236857', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -914,7 +914,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bristol Bay Region Career and Technical Education', 'BristolBayRegionCTE', 'A regional school-district consortium providing career and technical programs in rural Alaska.', 'https://bbrcte.org/', 'Palmer', 'AK', '99635', '2024-10-08 19:52:29.796802', '2024-10-08 19:52:29.796802', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bristol Bay Region Career and Technical Education', 'BristolBayRegionCTE', 'A regional school-district consortium providing career and technical programs in rural Alaska.', 'https://bbrcte.org/', 'Palmer', 'AK', '99635', '2024-10-08 19:52:29.796802', '2024-10-08 19:52:29.796802', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -947,7 +947,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Green Country Technology Center', 'GreenCountryTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Okmulgee, OK.', 'https://gctcok.edu/', 'Okmulgee', 'OK', '74447', '2024-10-08 20:32:36.204585', '2024-10-08 20:32:36.204585', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Green Country Technology Center', 'GreenCountryTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Okmulgee, OK.', 'https://gctcok.edu/', 'Okmulgee', 'OK', '74447', '2024-10-08 20:32:36.204585', '2024-10-08 20:32:36.204585', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -991,7 +991,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Moore Norman Technology Center', 'MooreNormanTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Norman, OK.', 'https://www.mntc.edu/', 'Norman', 'OK', '73069', '2024-10-08 22:17:48.705825', '2024-10-08 22:17:48.705825', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Moore Norman Technology Center', 'MooreNormanTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Norman, OK.', 'https://www.mntc.edu/', 'Norman', 'OK', '73069', '2024-10-08 22:17:48.705825', '2024-10-08 22:17:48.705825', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1035,7 +1035,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Franklin County Technical School', 'FranklinCTS', 'Provides career and technical education and workforce preparation for secondary and adult learners in Turners Falls, MA.', 'https://www.fcts.us/', 'Turners Falls', 'MA', '01376', '2025-01-06 14:17:54.692717', '2025-01-06 14:17:54.692717', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Franklin County Technical School', 'FranklinCTS', 'Provides career and technical education and workforce preparation for secondary and adult learners in Turners Falls, MA.', 'https://www.fcts.us/', 'Turners Falls', 'MA', '01376', '2025-01-06 14:17:54.692717', '2025-01-06 14:17:54.692717', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1046,7 +1046,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Tri County Tech', 'TriCountyTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Bartlesville, OK.', 'https://tricountytech.edu/', 'Bartlesville', 'OK', '74006', '2025-07-16 13:49:55.275254', '2025-09-19 15:25:09.626933', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Tri County Tech', 'TriCountyTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Bartlesville, OK.', 'https://tricountytech.edu/', 'Bartlesville', 'OK', '74006', '2025-07-16 13:49:55.275254', '2025-09-19 15:25:09.626933', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1101,7 +1101,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Kiamichi Technology Center', 'KiamichiTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Wilburton, OK.', 'https://www.ktc.edu/', 'Wilburton', 'OK', '74578', '2025-07-24 12:48:27.024987', '2025-07-24 12:48:27.024987', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Kiamichi Technology Center', 'KiamichiTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Wilburton, OK.', 'https://www.ktc.edu/', 'Wilburton', 'OK', '74578', '2025-07-24 12:48:27.024987', '2025-07-24 12:48:27.024987', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1123,7 +1123,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Express Aviation Academy', 'ExpressAA', 'Prepares students ages 13 to 18 for aviation careers through STEM education, technical training, and FAA exam preparation.', 'https://expressaviationacademy.org/', 'Jenks', 'OK', '74037', '2025-07-29 18:35:51.828737', '2025-07-29 18:35:51.828737', 1, 'career_technical_center', 'high_school', 'nonprofit')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Express Aviation Academy', 'ExpressAA', 'Prepares students ages 13 to 18 for aviation careers through STEM education, technical training, and FAA exam preparation.', 'https://expressaviationacademy.org/', 'Jenks', 'OK', '74037', '2025-07-29 18:35:51.828737', '2025-07-29 18:35:51.828737', 1, 'career_technical_education', 'high_school', 'nonprofit')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1145,7 +1145,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Cascadia Tech Academy', 'CascadiaTechAcademy', 'Provides career and technical education and workforce preparation for secondary and adult learners in Vancouver, WA.', 'https://www.evergreenps.org/', 'Vancouver', 'WA', '98668', '2025-08-04 19:47:54.098762', '2025-08-04 19:47:54.098762', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Cascadia Tech Academy', 'CascadiaTechAcademy', 'Provides career and technical education and workforce preparation for secondary and adult learners in Vancouver, WA.', 'https://www.evergreenps.org/', 'Vancouver', 'WA', '98668', '2025-08-04 19:47:54.098762', '2025-08-04 19:47:54.098762', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1167,7 +1167,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bismarck Public Schools CRACTC', 'BismarckPS', 'A Bismarck Public Schools partnership providing virtual and hands-on CTE opportunities to member-school students.', 'https://cractc.org/', 'Bismarck', 'ND', '58501', '2025-08-18 13:32:54.332650', '2025-08-18 14:36:48.376884', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Bismarck Public Schools CRACTC', 'BismarckPS', 'A Bismarck Public Schools partnership providing virtual and hands-on CTE opportunities to member-school students.', 'https://cractc.org/', 'Bismarck', 'ND', '58501', '2025-08-18 13:32:54.332650', '2025-08-18 14:36:48.376884', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1178,7 +1178,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('SEKCTEC', 'SEKCTEC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Pittsburg, KS.', 'https://wsutech.edu/', 'Pittsburg', 'KS', '66762', '2025-08-19 16:00:34.920317', '2025-08-19 16:00:34.920317', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('SEKCTEC', 'SEKCTEC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Pittsburg, KS.', 'https://wsutech.edu/', 'Pittsburg', 'KS', '66762', '2025-08-19 16:00:34.920317', '2025-08-19 16:00:34.920317', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1245,7 +1245,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('The Hub For Innovative Learning & Leadership', 'hubforinnovativell', 'A Fayette County public career and technical school connecting students with hands-on career pathways.', 'https://hill.fcps.net/about-us', 'Lexington', 'KY', '40508', '2025-09-10 19:34:34.665538', '2025-09-10 19:34:34.665538', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('The Hub For Innovative Learning & Leadership', 'hubforinnovativell', 'A Fayette County public career and technical school connecting students with hands-on career pathways.', 'https://hill.fcps.net/about-us', 'Lexington', 'KY', '40508', '2025-09-10 19:34:34.665538', '2025-09-10 19:34:34.665538', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1267,7 +1267,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Trumbull Career and Technical Center', 'TrumbullCareerTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Warren, OH.', 'https://www.tctchome.com/', 'Warren', 'OH', '44483', '2026-01-08 13:17:08.109160', '2026-01-08 13:17:08.109160', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Trumbull Career and Technical Center', 'TrumbullCareerTC', 'Provides career and technical education and workforce preparation for secondary and adult learners in Warren, OH.', 'https://www.tctchome.com/', 'Warren', 'OH', '44483', '2026-01-08 13:17:08.109160', '2026-01-08 13:17:08.109160', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1278,7 +1278,7 @@ ON DUPLICATE KEY UPDATE
     education_level = VALUES(education_level),
     governance_type = VALUES(governance_type);
 
-INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('CTEC Salem-Keizer School District', 'CTECSalemKeizerSD', 'A public career and technical education center offering high school students hands-on professional and technical programs.', 'https://ctec.salkeiz.k12.or.us/about', 'Salem', 'OR', '97305', '2026-01-30 18:23:58.219078', '2026-01-30 18:23:58.219078', 1, 'career_technical_center', 'secondary_adult', 'public')
+INSERT INTO chooseaerospace_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('CTEC Salem-Keizer School District', 'CTECSalemKeizerSD', 'A public career and technical education center offering high school students hands-on professional and technical programs.', 'https://ctec.salkeiz.k12.or.us/about', 'Salem', 'OR', '97305', '2026-01-30 18:23:58.219078', '2026-01-30 18:23:58.219078', 1, 'career_technical_education', 'secondary_adult', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
     city = COALESCE(VALUES(city), city),
@@ -1418,7 +1418,7 @@ SELECT COUNT(*) AS classified_organization_count
 FROM chooseaerospace_prod_openedx.organizations_organization
 WHERE short_name IN ('CA', 'DesMoinesPS', 'LibertyHS', 'SAMSAcademy', 'CharlesPageHS', 'BethlehemAVTS', 'MetroTC', 'PryorHS', 'NewcastleHS', 'BartlesvilleHS', 'BristowHS', 'OiltonHS', 'GreatPlainsTC', 'RisingAviationHS', 'VanguardAcademy', 'MoorePublicSchoolsWestmoore', 'YukonPS', 'FrankfordHS', 'WesternHeightsHS', 'CollinsvilleHS', 'PayetteRiverTA', 'DavisAerospaceTHS', 'WeatherfordPS', 'ClevelandPS', 'SomersetCTC', 'EaglesNestPW', 'USAviationAcademy', 'ViennaHS', 'AlabamaAAHS', 'WestMichiganAA', 'EastCentralHS', 'MoorePublicSchoolsSouthmoore', 'PutnamCitySchools', 'MoorePublicSchoolsMooreHigh', 'ATSmro', 'WTA4USA', 'FlightExpo', 'GreenbrierCA', 'CapeCodCC', 'OkmulgeeHS', 'SouthernTech', 'WellingtonHS', 'DurantHS', 'SouthwesternIllinoisCollege', 'OliveHS', 'MentoringMission', 'GatewayAcademy', 'WayneCS', 'HoodRiverValleyHS', 'GoddardHS', 'McKinneyNorthHS', 'PolarisCC', 'ChelseaHS', 'SIU', 'SWTech', 'ShenandoahValleyGS', 'BrokenArrowPS', 'MarionHS', 'RisingTideCPS', 'SilverLakeHS', 'FultonLA', 'AmericanIntlAcademy', 'RossSterlingAHS', 'WillistonHS', 'IDEAFamilies', 'ButlerTech', 'TuskegeeAirmenNM', 'AdaCitySchools', 'DubiskiCareerHS', 'GrandIslandPS', 'JeffersonUnion', 'McAlesterPublicSchools', 'MidDelTechCenter', 'BristolBayRegionCTE', 'BrowardCollege', 'CrowleyISD', 'GreenCountryTC', 'GreenvilleTech', 'JerseyCityPS', 'LakeTaylorHS', 'MooreNormanTC', 'ViperTransitions', 'CapeFearCC', 'BurkeHS', 'FranklinCTS', 'TriCountyTC', 'CollegeCommunitySD', 'ChooseAerospace_Support', 'STAYIndiana', 'UnionPS', 'KiamichiTC', 'NorthArkansasCollege', 'ExpressAA', 'AscensionAcademy', 'CascadiaTechAcademy', 'DodgeCityHS', 'BismarckPS', 'SEKCTEC', 'WaldenGroveHS', 'PhiladelphiaSD', 'CalhounCC', 'SpringValleyHS', 'poncacityps', 'hubforinnovativell', 'AARAircraftServices', 'TrumbullCareerTC', 'CTECSalemKeizerSD', 'MadisonvilleCC', 'ColoradoRiverBOCES', 'ATECAcademy', 'CatawbaValleyCC', 'PuebloCC', 'StJosephSD')
   AND organization_type IN (
-    'k12_school', 'school_district', 'career_technical_center', 'homeschool',
+    'k12_school', 'school_district', 'career_technical_education', 'homeschool',
     'college_university', 'training_provider', 'workforce_agency',
     'education_nonprofit', 'education_technology', 'employer',
     'government_agency', 'internal_program', 'other', 'unknown'
