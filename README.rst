@@ -27,22 +27,46 @@ Local Development
     $ make test
     $ make quality
 
+CI runs on ``ubuntu-latest`` with Python 3.12, Django 4.2 compatibility tests,
+Ulmo Django 5.2 tests, quality checks, and documentation/package validation.
+Run the same checks locally in an isolated Python 3.12 environment::
+
+    python -m pip install "tox>=4,<5"
+    tox
+
+``requirements/ulmo-test.in`` uses the test-only ``ulmo-constraints.txt``
+snapshot of shared runtime dependencies from the platform. Refresh that snapshot
+when the target platform requirements change. These constraints are never used
+in the plugin's runtime package metadata.
+
+Run only the Ulmo suite with ``tox -e py312-django52``, or only legacy
+compatibility tests with ``tox -e py312-django42``.
+
 Open edX Platform Integration
 -----------------------------
 
-1. Update the version of ``edx-organizations`` in the appropriate requirements file (e.g. ``requirements/edx/base.txt``).
-2. Add ‘organizations’ to the list of installed apps in ``common.py``.
-3. Install all requirements:
+Ulmo owns the versions of shared dependencies. Both ``requirements/base.in``
+and ``requirements/base.txt`` declare runtime dependencies without exact pins;
+the package metadata reads ``base.in`` without development constraints.
+Setuptools is a build dependency, not a runtime dependency of this application.
 
-.. code-block:: bash
+Provision the environment using the target platform's requirements first. To
+install this fork into that environment without changing shared dependencies,
+run from this repository::
 
-   $ pip install -r requirements
+    python -m pip install --no-deps .
 
-4. (Optional) Run tests:
+Use ``--no-deps -e .`` instead for editable development in a provisioned platform
+environment. This assumes all runtime dependencies are already installed.
 
-.. code-block:: bash
+The fork's package version is managed separately from Ulmo's upstream
+``edx-organizations`` pin. Account for that replacement in deployment
+configuration; do not install both versions.
 
-   $ paver test_system -s lms
+``requirements/constraints.txt``, ``requirements/common_constraints.txt``,
+``test-requirements.txt``, and ``make requirements`` are for isolated development
+and testing. They contain legacy pins and must not be installed into the platform
+environment. ``make upgrade`` preserves the unpinned runtime requirements.
 
 How to Contribute
 -----------------
