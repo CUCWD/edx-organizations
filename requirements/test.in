@@ -11,3 +11,6 @@ pycodestyle
 pytest-cov                # pytest extension for code coverage statistics
 pytest-django             # pytest extension for better Django support
 tox
+
+# Legacy simple-history 3.1.1 imports pkg_resources; keep this test-only.
+setuptools==69.2.0

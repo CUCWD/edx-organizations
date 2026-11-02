@@ -554,6 +554,8 @@ def fetch_organization_courses(organization):
     Retrieves the set of courses currently linked to the specified organization
     """
     organization_obj = serializers.deserialize_organization(organization)
+    if organization_obj.pk is None:
+        return []
     queryset = internal.OrganizationCourse.objects.filter(
         organization=organization_obj,
         active=True

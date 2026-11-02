@@ -1,0 +1,36 @@
+# Test-only snapshot of the shared runtime dependency versions in Ulmo.
+# Source: openedx-platform/requirements/edx/base.txt and requirements/pip.txt
+# Platform commit: 46c543590c
+# Refresh against the target platform when its requirements change.
+# Never include this file in runtime package metadata.
+asgiref==3.10.0
+certifi==2025.10.5
+cffi==2.0.0
+charset-normalizer==3.4.4
+click==8.3.0
+cryptography==45.0.7
+django==5.2.11
+django-crum==0.7.9
+django-model-utils==5.0.0
+django-simple-history==3.10.1
+django-waffle==5.0.0
+djangorestframework==3.16.1
+dnspython==2.8.0
+drf-jwt==1.19.2
+edx-django-utils==8.0.1
+edx-drf-extensions==10.6.0
+edx-opaque-keys==3.0.0
+idna==3.11
+pillow==12.0.0
+psutil==7.1.2
+pycparser==2.23
+pyjwt==2.10.1
+pymongo==4.4.0
+pynacl==1.6.0
+requests==2.32.5
+semantic-version==2.10.0
+setuptools==80.9.0
+sqlparse==0.5.3
+stevedore==5.5.0
+typing-extensions==4.15.0
+urllib3==2.5.0

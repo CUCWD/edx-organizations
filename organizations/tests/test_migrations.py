@@ -9,7 +9,6 @@ from django.core.management import call_command
 from django.test.testcases import TestCase
 from django.test.utils import override_settings
 
-from organizations.models import Organization
 from organizations.tests.factories import OrganizationFactory
 
 

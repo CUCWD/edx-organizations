@@ -1,3 +1,4 @@
+# Development/test constraints only. Do not apply these to edx-platform installs.
 # Version constraints for pip installation.
 #
 # This file doesn't install any packages. It specifies version constraints

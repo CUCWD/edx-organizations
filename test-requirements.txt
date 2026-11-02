@@ -263,4 +263,5 @@ virtualenv==20.25.1
     # via tox
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools
+setuptools==69.2.0
+    # via -r requirements/test.in
