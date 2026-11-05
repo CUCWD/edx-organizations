@@ -81,6 +81,8 @@ class Organization(TimeStampedModel):
     An Organization is a representation of an entity which publishes/provides
     one or more courses delivered by the LMS. Organizations have a base set of
     metadata describing the organization, including id, name, and description.
+
+    .. no_pii:
     """
 
     class OrganizationType(models.TextChoices):
@@ -383,6 +385,8 @@ class OrganizationCourse(TimeStampedModel):
     Course (via course key). Because Courses are not true Open edX entities
     (in the Django/ORM sense) the modeling and integrity is limited to that
     of specifying course identifier strings in this model.
+
+    .. no_pii:
     """
     course_id = models.CharField(max_length=255, db_index=True, verbose_name='Course ID')
     organization = models.ForeignKey(Organization, db_index=True, on_delete=models.CASCADE)

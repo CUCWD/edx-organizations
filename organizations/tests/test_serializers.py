@@ -4,6 +4,7 @@ Tests for Organizations API serializers.
 
 
 from django.test import TestCase
+from rest_framework.fields import DateTimeField
 from rest_framework.settings import api_settings
 
 from organizations.models import Organization
@@ -19,6 +20,8 @@ class TestOrganizationSerializer(TestCase):
 
     def test_data(self):
         """ Verify that OrganizationSerializer serialize data correctly."""
+        datetime_field = DateTimeField(format=api_settings.DATETIME_FORMAT)
+
         serialize_data = OrganizationSerializer(self.organization)
         expected = {
             "id": self.organization.id,
@@ -35,8 +38,8 @@ class TestOrganizationSerializer(TestCase):
             "governance_type": self.organization.governance_type,
             "parent_organizations": [],
             "active": self.organization.active,
-            "created": self.organization.created.strftime(api_settings.DATETIME_FORMAT),
-            "modified": self.organization.modified.strftime(api_settings.DATETIME_FORMAT)
+            "created": datetime_field.to_representation(self.organization.created),
+            "modified": datetime_field.to_representation(self.organization.modified),
         }
         self.assertEqual(serialize_data.data, expected)
 

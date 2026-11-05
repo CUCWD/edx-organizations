@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        python-version: ['3.12']
+        python-version: ['3.11', '3.12']
         toxenv: [quality, docs, django42, django52]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: setup python
       uses: actions/setup-python@v5
       with:
@@ -35,7 +35,7 @@ jobs:
 
     - name: Run Coverage
       if: matrix.toxenv == 'django52'
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
