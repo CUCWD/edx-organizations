@@ -22,12 +22,18 @@
 
 START TRANSACTION;
 
+-- Preserve the existing organization row when adopting the normalized short name.
+UPDATE skilredi_prod_openedx.organizations_organization
+SET short_name = 'SCCTE',
+    modified = CURRENT_TIMESTAMP(6)
+WHERE short_name = 'SC-CTE';
+
 -- Parent organizations must be inserted before the child organizations that reference them.
 INSERT INTO skilredi_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES
     -- Parent organization: Clemson University
     ('Clemson University', 'Clemson', 'A public research university offering academic, continuing, and workforce education in Clemson, SC.', 'https://www.clemson.edu/', 'Clemson', 'SC', '29634', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'college_university', 'postsecondary', 'public'),
     -- Parent organization: South Carolina Department of Education
-    ('South Carolina Department of Education', 'SC-CTE', 'The state education agency supporting career and technical education programs across South Carolina.', 'https://ed.sc.gov/instruction/career-and-technical-education/', 'Columbia', 'SC', '29201', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'government_agency', 'secondary_adult', 'state_government'),
+    ('South Carolina Department of Education', 'SCCTE', 'The state education agency supporting career and technical education programs across South Carolina.', 'https://ed.sc.gov/instruction/career-and-technical-education/', 'Columbia', 'SC', '29201', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'government_agency', 'secondary_adult', 'state_government'),
     -- Parent organization: Spartanburg County School District Three
     ('Spartanburg County School District Three', 'SpartanburgSD3', 'A public K-12 school district serving students and communities in Spartanburg County, SC.', 'https://www.spartanburg3.org/', 'Glendale', 'SC', '29346', CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 0, 'school_district', 'k12', 'public'),
     -- Parent organization: Spartanburg County School District Seven
@@ -398,20 +404,20 @@ FROM skilredi_prod_openedx.organizations_organization AS child
 INNER JOIN (
     SELECT 'REVVED' AS child_short_name, 'Clemson' AS parent_short_name
     UNION ALL SELECT 'ThunderboltCTC', 'ColletonCountySD'
-    UNION ALL SELECT 'ThunderboltCTC', 'SC-CTE'
+    UNION ALL SELECT 'ThunderboltCTC', 'SCCTE'
     UNION ALL SELECT 'GettysMS', 'PickensCountySD'
     UNION ALL SELECT 'PCCTC', 'PickensCountySD'
     UNION ALL SELECT 'DanielMorganTC', 'SpartanburgSD3'
     UNION ALL SELECT 'DanielMorganTC', 'SpartanburgSD7'
-    UNION ALL SELECT 'DanielMorganTC', 'SC-CTE'
+    UNION ALL SELECT 'DanielMorganTC', 'SCCTE'
     UNION ALL SELECT 'SumterCTC', 'SumterSD'
-    UNION ALL SELECT 'SumterCTC', 'SC-CTE'
+    UNION ALL SELECT 'SumterCTC', 'SCCTE'
     UNION ALL SELECT 'EnoreeCC', 'GreenvilleCS'
-    UNION ALL SELECT 'EnoreeCC', 'SC-CTE'
+    UNION ALL SELECT 'EnoreeCC', 'SCCTE'
     UNION ALL SELECT 'HeywardCTC', 'RichlandOneSD'
-    UNION ALL SELECT 'HeywardCTC', 'SC-CTE'
+    UNION ALL SELECT 'HeywardCTC', 'SCCTE'
     UNION ALL SELECT 'LexingtonTwoIC', 'LexingtonTwoSD'
-    UNION ALL SELECT 'LexingtonTwoIC', 'SC-CTE'
+    UNION ALL SELECT 'LexingtonTwoIC', 'SCCTE'
     UNION ALL SELECT 'LakeviewMS', 'GreenvilleCS'
     UNION ALL SELECT 'RichlandTwoInnovationCenter', 'RichlandTwoSD'
     UNION ALL SELECT 'CUCWD', 'Clemson'
