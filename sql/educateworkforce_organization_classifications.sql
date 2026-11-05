@@ -13,7 +13,7 @@
 -- are classified conservatively when no public project page was available.
 --
 -- Current organization_type values used by the application are:
--- k12_school, school_district, career_technical_center, homeschool,
+-- k12_school, school_district, career_technical_education, homeschool,
 -- college_university, training_provider, workforce_agency,
 -- education_nonprofit, education_technology, employer, government_agency,
 -- internal_program, other, and unknown.
@@ -235,7 +235,7 @@ SELECT COUNT(*) AS classified_organization_count
 FROM educateworkforce_prod_openedx.organizations_organization
 WHERE short_name IN ('REVVED', 'CO-DREAM-OER', 'MEEP', 'USDOE', 'IACMI', 'MSSC', 'A2Grant', 'SUNYUlsterCC', 'WaterDROPS', 'AIMPhotonics', 'CUCWD', 'TraCR', 'Clemson', 'TRUSTWORKS', 'CentralCarolinaTC')
   AND organization_type IN (
-    'k12_school', 'school_district', 'career_technical_center', 'homeschool',
+    'k12_school', 'school_district', 'career_technical_education', 'homeschool',
     'college_university', 'training_provider', 'workforce_agency',
     'education_nonprofit', 'education_technology', 'employer',
     'government_agency', 'internal_program', 'other', 'unknown'
