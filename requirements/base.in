@@ -1,5 +1,5 @@
--c constraints.txt
-
+# Runtime dependencies are versioned by the host edx-platform environment.
+# Keep development constraints and compiled pins out of package metadata.
 django
 django-model-utils
 django-simple-history
@@ -7,4 +7,3 @@ djangorestframework
 edx-drf-extensions
 edx-opaque-keys>=0.1.2
 Pillow
-setuptools

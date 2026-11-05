@@ -1,0 +1,15 @@
+# Standalone CI for the Ulmo runtime dependency stack (Python 3.12).
+-c ulmo-constraints.txt
+-r base.in
+
+coverage
+ddt
+factory-boy
+pytest-cov
+pytest-django
+# Keep the established lint versions while changing the runtime under test.
+edx-lint==5.3.6
+pylint==3.1.0
+pycodestyle==2.11.1
+# Required by the legacy lint tooling, not the runtime plugin.
+setuptools

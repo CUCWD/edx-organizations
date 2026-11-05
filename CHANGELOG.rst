@@ -14,6 +14,18 @@ Change Log
 Unreleased
 ~~~~~~~~~~
 
+[v7.3.0.0+skilredi] - 2026-11-05
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Identify the SkilRedi distribution with a distinct local version.
+* Defer runtime dependency versions to the host Open edX platform and align
+  development and Django 5.2 test dependencies with Ulmo constraints.
+* Update CI to test Python 3.11 and 3.12 on ubuntu-latest, retaining Django 4.2
+  compatibility checks alongside Ulmo tests.
+* Return an empty course list for unsaved organizations to avoid invalid related
+  queries under Django 5.2.
+
+
 [v7.3.0] - 2025-08-28
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -28,8 +28,8 @@ upgrade: $(COMMON_CONSTRAINTS_TXT)
 	pip-compile --upgrade -o requirements/pip-tools.txt requirements/pip-tools.in
 	pip install -qr requirements/pip.txt
 	pip install -qr requirements/pip-tools.txt
-	pip-compile --upgrade --allow-unsafe -o requirements/base.txt requirements/base.in
-	pip-compile --upgrade -o test-requirements.txt requirements/test.in
+	# Keep base.txt as a reference to base.in; only compile development requirements.
+	pip-compile --upgrade --allow-unsafe -o test-requirements.txt requirements/test.in
 	# Let tox control the Django version for tests
 	sed -i.tmp '/^django==/d' test-requirements.txt
 	rm test-requirements.txt.tmp

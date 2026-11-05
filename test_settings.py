@@ -1,5 +1,9 @@
 SECRET_KEY = 'insecure-secret-key'
 
+# Match the platform and avoid Django-version-dependent timezone defaults.
+USE_TZ = True
+TIME_ZONE = 'UTC'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
