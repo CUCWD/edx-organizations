@@ -1,9 +1,10 @@
 -- Insert or backfill classifications for the EducateWorkforce Open edX site.
--- Run after organizations migration 0007_organization_and_parent_website_location.
+-- Run after organizations migration 0008_remove_historicalorganization_parent_organization_and_more.
 -- The unique short_name key makes each statement idempotent. New records retain
 -- the source created, modified, and active values. Existing records update the
 -- reviewed description plus the location, website, and classification fields
 -- listed in ON DUPLICATE KEY UPDATE.
+-- Parent organization upserts also synchronize the active field.
 -- Incoming NULL locations preserve any location already stored on a duplicate.
 -- website_url stores the supporting organization page separately from the
 -- concise, human-readable description.
@@ -32,7 +33,8 @@ INSERT INTO educateworkforce_prod_openedx.organizations_organization (name, shor
     -- Parent organization: South Carolina Technical College System
     ('South Carolina Technical College System', 'SCTCS', 'A public statewide system supporting technical colleges and workforce education in South Carolina.', 'https://www.sctechsystem.edu/', null, 'SC', null, CURRENT_TIMESTAMP(6), CURRENT_TIMESTAMP(6), 1, 'government_agency', 'postsecondary', 'state_government')
 ON DUPLICATE KEY UPDATE
-    short_name = VALUES(short_name);
+    short_name = VALUES(short_name),
+    active = VALUES(active);
 
 INSERT INTO educateworkforce_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Revolutionizing Electric Vehicle Education', 'REVVED', 'A Clemson-led consortium developing electric-vehicle education, training resources, and workforce pathways.', 'https://news.clemson.edu/revved-consortium/', 'Clemson', 'SC', '29634', '2025-09-11 15:50:05.783435', '2025-09-22 18:28:11.245876', 1, 'education_nonprofit', 'postsecondary', 'public')
 ON DUPLICATE KEY UPDATE
@@ -170,6 +172,7 @@ ON DUPLICATE KEY UPDATE
 INSERT INTO educateworkforce_prod_openedx.organizations_organization (name, short_name, description, website_url, city, state, zipcode, created, modified, active, organization_type, education_level, governance_type) VALUES ('Clemson University', 'Clemson', 'A public research university offering undergraduate, graduate, continuing, and workforce education in Clemson, SC.', 'https://www.clemson.edu/', 'Clemson', 'SC', '29634', '2025-10-08 18:02:55.140247', '2025-10-08 18:02:55.140247', 1, 'college_university', 'postsecondary', 'public')
 ON DUPLICATE KEY UPDATE
     description = VALUES(description),
+    active = VALUES(active),
     city = COALESCE(VALUES(city), city),
     state = COALESCE(VALUES(state), state),
     zipcode = COALESCE(VALUES(zipcode), zipcode),
@@ -201,7 +204,12 @@ ON DUPLICATE KEY UPDATE
     governance_type = VALUES(governance_type);
 
 -- Assign child organizations to the parent organizations inserted above.
-UPDATE educateworkforce_prod_openedx.organizations_organization AS child
+INSERT IGNORE INTO educateworkforce_prod_openedx.organizations_organization_parent_organizations (
+    from_organization_id,
+    to_organization_id
+)
+SELECT child.id, parent.id
+FROM educateworkforce_prod_openedx.organizations_organization AS child
 INNER JOIN (
     SELECT 'REVVED' AS child_short_name, 'Clemson' AS parent_short_name
     UNION ALL SELECT 'CO-DREAM-OER', 'Clemson'
@@ -216,9 +224,7 @@ INNER JOIN (
 ) AS relationship
     ON relationship.child_short_name = child.short_name
 INNER JOIN educateworkforce_prod_openedx.organizations_organization AS parent
-    ON parent.short_name = relationship.parent_short_name
-SET child.parent_organization_id = parent.id
-WHERE NOT (child.parent_organization_id <=> parent.id);
+    ON parent.short_name = relationship.parent_short_name;
 
 COMMIT;
 
@@ -243,8 +249,10 @@ WHERE short_name IN ('REVVED', 'CO-DREAM-OER', 'MEEP', 'USDOE', 'IACMI', 'MSSC',
 -- Verification: every configured relationship should resolve to its expected parent.
 SELECT child.short_name AS child_short_name, parent.short_name AS parent_short_name
 FROM educateworkforce_prod_openedx.organizations_organization AS child
+INNER JOIN educateworkforce_prod_openedx.organizations_organization_parent_organizations AS relationship
+    ON relationship.from_organization_id = child.id
 INNER JOIN educateworkforce_prod_openedx.organizations_organization AS parent
-    ON parent.id = child.parent_organization_id
+    ON parent.id = relationship.to_organization_id
 WHERE child.short_name IN (
     'REVVED', 'CO-DREAM-OER', 'MEEP', 'A2Grant', 'SUNYUlsterCC',
     'WaterDROPS', 'CUCWD', 'TraCR', 'TRUSTWORKS', 'CentralCarolinaTC'

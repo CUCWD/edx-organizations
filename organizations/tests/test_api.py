@@ -33,7 +33,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
 
     def test_add_organization(self):
         """ Unit Test: test_add_organization"""
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(4):
             organization = api.add_organization({
                 'short_name': 'local_organization',
                 'name': 'local_organizationßßß',
@@ -50,7 +50,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
         }
         organization = api.add_organization(organization_data)
         self.assertGreater(organization['id'], 0)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             organization = api.add_organization(organization_data)
 
     def test_add_organization_inactive_to_active(self):
@@ -64,7 +64,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
         self.assertGreater(organization['id'], 0)
         api.remove_organization(organization['id'])
 
-        with self.assertNumQueries(5):
+        with self.assertNumQueries(6):
             organization = api.add_organization(organization_data)
 
         # Assert that the organization is active by making sure we can load it.
@@ -84,7 +84,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
             self.test_course_key
         )
 
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             organization = api.add_organization(organization_data)
 
     @ddt.data(
@@ -121,7 +121,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
         """ Unit Test: test_edit_organization"""
         self.test_organization['name'] = 'Edited Organizationßßß'
 
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             api.edit_organization(self.test_organization)
 
     def test_edit_organization_invalid_data_throws_exceptions(self):
@@ -149,7 +149,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
 
     def test_get_organization(self):
         """ Unit Test: test_get_organization"""
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             organization = api.get_organization(self.test_organization['id'])
         self.assertEqual(organization['name'], self.test_organization['name'])
         self.assertEqual(organization['description'], self.test_organization['description'])
@@ -166,7 +166,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
             'short_name': 'Orgx2',
             'description': 'Local Organization 2'
         })
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             organization = api.get_organization_by_short_name('Orgx2')
         self.assertEqual(organization['name'], 'local_organization_2')
         self.assertEqual(organization['description'], 'Local Organization 2')
@@ -191,7 +191,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
             'short_name': 'Orgx2',
             'description': 'Local Organization 2 Descriptionßßß'
         })
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             organizations = api.get_organizations()
         self.assertEqual(len(organizations), 3)  # One from SetUp, two from local
 
@@ -274,7 +274,7 @@ class OrganizationsApiTestCase(utils.OrganizationsTestCaseBase):
             self.test_organization,
             self.test_course_key
         )
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             course_organizations = api.get_course_organizations(self.test_course_key)
         self.assertEqual(len(course_organizations), 1)
 

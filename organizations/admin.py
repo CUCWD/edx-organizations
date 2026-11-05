@@ -4,7 +4,7 @@ from django.contrib import admin, messages
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.db.models import Q
 from django.urls import reverse
-from django.utils.html import format_html, format_html_join
+from django.utils.html import format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from organizations.models import Organization, OrganizationCourse
@@ -29,38 +29,55 @@ class OrganizationAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        available_children = Organization.objects.filter(
-            parent_organization__isnull=True,
-            child_organizations__isnull=True,
-        )
+        available_children = Organization.objects.filter(child_organizations__isnull=True)
 
         if self.instance.pk:
             has_children = self.instance.child_organizations.exists()
-            available_children = Organization.objects.filter(
-                Q(parent_organization__isnull=True) | Q(parent_organization=self.instance)
-            ).filter(child_organizations__isnull=True).exclude(pk=self.instance.pk)
+            has_parents = self.instance.parent_organizations.exists()
+            available_children = available_children.exclude(pk=self.instance.pk)
             self.fields['child_organizations'].initial = self.instance.child_organizations.all()
 
-            if has_children and 'parent_organization' in self.fields:
-                self.fields['parent_organization'].disabled = True
-                self.fields['parent_organization'].help_text = _(
-                    'A parent organization cannot be assigned because this organization already has children.'
+            if has_children and 'parent_organizations' in self.fields:
+                self.fields['parent_organizations'].disabled = True
+                self.fields['parent_organizations'].help_text = _(
+                    'Parent organizations cannot be assigned because this organization already has children.'
                 )
 
-            if self.instance.parent_organization_id is not None:
+            if has_parents:
                 self.fields['child_organizations'].disabled = True
                 self.fields['child_organizations'].help_text = _(
-                    'Child organizations cannot be assigned because this organization already has a parent.'
+                    'Child organizations cannot be assigned because this organization already has parents.'
                 )
 
-        self.fields['child_organizations'].queryset = available_children.order_by('name', 'short_name')
+        if 'parent_organizations' in self.fields:
+            available_parents = Organization.objects.filter(parent_organizations__isnull=True)
+            if self.instance.pk:
+                available_parents = available_parents.exclude(pk=self.instance.pk)
+            self.fields['parent_organizations'].queryset = available_parents.distinct().order_by('name', 'short_name')
+
+        self.fields['child_organizations'].queryset = available_children.distinct().order_by('name', 'short_name')
+
+    def clean_parent_organizations(self):
+        """Prevent self-reference and selecting child organizations as parents."""
+        parent_organizations = self.cleaned_data['parent_organizations']
+
+        if self.instance.pk and parent_organizations.filter(pk=self.instance.pk).exists():
+            raise forms.ValidationError(_('An organization cannot be its own parent.'))
+
+        if parent_organizations.filter(parent_organizations__isnull=False).exists():
+            raise forms.ValidationError(_('A child organization cannot be selected as a parent organization.'))
+
+        if self.instance.pk and self.instance.child_organizations.exists() and parent_organizations.exists():
+            raise forms.ValidationError(_('An organization with child organizations cannot have parents.'))
+
+        return parent_organizations
 
     def clean_child_organizations(self):
         """Prevent cycles and organization hierarchies deeper than one level."""
         child_organizations = self.cleaned_data['child_organizations']
-        parent_organization = self.cleaned_data.get('parent_organization')
+        parent_organizations = self.cleaned_data.get('parent_organizations')
 
-        if parent_organization is not None and child_organizations.exists():
+        if parent_organizations is not None and parent_organizations.exists() and child_organizations.exists():
             raise forms.ValidationError(_(
                 'A child organization cannot have its own child organizations.'
             ))
@@ -69,16 +86,6 @@ class OrganizationAdminForm(forms.ModelForm):
             raise forms.ValidationError(_(
                 'An organization that already has children cannot be selected as a child organization.'
             ))
-
-        ancestor_ids = set()
-        ancestor = self.instance.parent_organization
-
-        while ancestor is not None and ancestor.pk not in ancestor_ids:
-            ancestor_ids.add(ancestor.pk)
-            ancestor = ancestor.parent_organization
-
-        if ancestor_ids and child_organizations.filter(pk__in=ancestor_ids).exists():
-            raise forms.ValidationError(_('An ancestor organization cannot also be a child organization.'))
 
         return child_organizations
 
@@ -239,7 +246,7 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         'organization_type',
         'education_level',
         'governance_type',
-        'parent_organization',
+        'parent_organizations',
         'child_organizations',
         'child_organization_links',
         'sites',
@@ -252,7 +259,7 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         'organization_type',
         'education_level',
         'governance_type',
-        'parent_organization_link',
+        'parent_organization_links',
         'child_organization_links',
         'logo',
         'active',
@@ -264,8 +271,7 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         GovernanceTypeFilter,
     )
     ordering = ('name', 'short_name',)
-    autocomplete_fields = ('parent_organization',)
-    list_select_related = ('parent_organization',)
+    autocomplete_fields = ('parent_organizations',)
     readonly_fields = ('child_organization_links', 'created')
     search_fields = (
         'name',
@@ -273,15 +279,15 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         'organization_type',
         'education_level',
         'governance_type',
-        'parent_organization__name',
-        'parent_organization__short_name',
+        'parent_organizations__name',
+        'parent_organizations__short_name',
     )
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         """Configure the parent and reverse-child organization autocomplete widgets."""
         form = super().get_form(request, obj, change, **kwargs)
-        if 'parent_organization' in form.base_fields:
-            parent_widget = form.base_fields['parent_organization'].widget
+        if 'parent_organizations' in form.base_fields:
+            parent_widget = form.base_fields['parent_organizations'].widget
             parent_widget.attrs['class'] = ' '.join(filter(None, (
                 parent_widget.attrs.get('class'),
                 'parent-organization-autocomplete',
@@ -293,26 +299,29 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
             parent_widget.attrs['data-width'] = '50em'
         if 'child_organizations' in form.base_fields:
             form.base_fields['child_organizations'].widget = AutocompleteSelectMultiple(
-                Organization._meta.get_field('parent_organization'),  # pylint: disable=protected-access
+                Organization._meta.get_field('parent_organizations'),  # pylint: disable=protected-access
                 self.admin_site,
                 attrs={'class': 'child-organizations-autocomplete'},
             )
         return form
 
-    @admin.display(
-        description=_('District / Parent Organization'),
-        ordering='parent_organization__name',
-    )
-    def parent_organization_link(self, organization):
-        """Link the parent organization to its full Organization change page."""
-        parent = organization.parent_organization
-        if parent is None:
+    @admin.display(description=_('District / Parent Organizations'))
+    def parent_organization_links(self, organization):
+        """Link each parent organization to its full Organization change page."""
+        parents = sorted(
+            organization.parent_organizations.all(),
+            key=lambda parent: (parent.name, parent.short_name),
+        )
+        if not parents:
             return _('None')
 
-        return format_html(
-            '<a href="{}">{}</a>',
-            reverse('admin:organizations_organization_change', args=(parent.pk,)),
-            parent,
+        return format_html_join(
+            '',
+            '<div><a href="{}">{}</a></div>',
+            (
+                (reverse('admin:organizations_organization_change', args=(parent.pk,)), parent)
+                for parent in parents
+            ),
         )
 
     @admin.display(description=_('Child Organizations'))
@@ -321,7 +330,10 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         if organization is None or organization.pk is None:
             return _('None')
 
-        children = list(organization.child_organizations.only('id', 'name', 'short_name').order_by('name'))
+        children = sorted(
+            organization.child_organizations.all(),
+            key=lambda child: (child.name, child.short_name),
+        )
         if not children:
             return _('None')
 
@@ -336,7 +348,7 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Load child organizations efficiently for the changelist link column."""
-        return super().get_queryset(request).prefetch_related('child_organizations')
+        return super().get_queryset(request).prefetch_related('parent_organizations', 'child_organizations')
 
     def save_related(self, request, form, formsets, change):
         """Persist assignments made through the reverse child selector."""
@@ -348,13 +360,11 @@ class OrganizationAdmin(ActivateDeactivateAdminMixin, admin.ModelAdmin):
         selected_ids = set(form.cleaned_data['child_organizations'].values_list('id', flat=True))
 
         for child in organization.child_organizations.exclude(pk__in=selected_ids):
-            child.parent_organization = None
-            child.save(update_fields=['parent_organization'])
+            child.parent_organizations.remove(organization)
 
-        for child in Organization.objects.filter(pk__in=selected_ids).exclude(parent_organization=organization):
-            child.parent_organization = organization
+        for child in Organization.objects.filter(pk__in=selected_ids).exclude(parent_organizations=organization):
+            child.parent_organizations.add(organization)
             child.clean()
-            child.save(update_fields=['parent_organization'])
 
     def formfield_for_choice_field(self, db_field, request, **kwargs):
         """Render classification choices in the ordered groups defined by the model."""

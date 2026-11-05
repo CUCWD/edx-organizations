@@ -23,7 +23,7 @@ class OrganizationsViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSe
         - retrieve single organization (GET .../<short_name>)
         - create or update an organization via the PUT endpoint (PUT .../<short_name>)
     """
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.prefetch_related('parent_organizations')
     serializer_class = OrganizationSerializer
     # Include everything not a '+' - identical to discovery's COURSE_ID_REGEX.
     lookup_value_regex = '[^/+]+'

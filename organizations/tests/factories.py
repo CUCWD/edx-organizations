@@ -38,3 +38,9 @@ class OrganizationFactory(DjangoModelFactory):
     education_level = Organization.EducationLevel.UNKNOWN
     governance_type = Organization.GovernanceType.UNKNOWN
     active = True
+
+    @factory.post_generation
+    def parent_organizations(self, create, extracted, **_kwargs):
+        """Assign zero or more parent organizations after creating the instance."""
+        if create and extracted:
+            self.parent_organizations.set(extracted)
